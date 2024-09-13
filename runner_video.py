@@ -10,14 +10,13 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = (400, 300)
+        self.rect.center = (0, 300)
 
     def update(self):
         self.move()
 
     def move(self):
         self.rect.x += 1
-###player_walk_2 = pygame.image.load("graphics/player/player_walk_2.png").convert_alpha()
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
