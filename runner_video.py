@@ -60,6 +60,12 @@ while True:
         if event.type == spawn_timer:
             enemies_group.add(Enemy())
 
+    # Enemies won?
+    for enemy in enemies_group:
+        if enemy.rect.x > 800:
+            enemy.kill()
+            score -= 3
+
     screen.fill("darkgreen")
 
     score_surf = game_font.render(f"Score: {score}", False, (64, 64, 64))
