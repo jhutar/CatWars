@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
         self.rect = self.image.get_rect()
-        self.rect.center = (0, 300)
+        self.rect.center = (-30, 300)
         self.health = 10
 
     def update(self):
@@ -80,7 +80,7 @@ while True:
 
     screen.fill("darkgreen")
 
-    score_surf = game_font.render(f"Score: {score}", False, (64, 64, 64))
+    score_surf = game_font.render(f"Score: {score}", False, (200, 50, 100))
     score_rect = score_surf.get_rect(center=(400, 50))
     screen.blit(score_surf, score_rect)
 
