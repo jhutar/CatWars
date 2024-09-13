@@ -20,7 +20,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x += 1
 
     def demage(self):
-        self.health -= 5
+        power = random.randint(2, 6)
+        self.health -= power
         if self.health <= 0:
             self.kill()
             return 1
