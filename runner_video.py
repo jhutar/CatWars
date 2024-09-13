@@ -51,11 +51,13 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
+            print(f"SCORE: {score}")   # TODO: Deduplicate
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 pygame.quit()
+                print(f"SCORE: {score}")   # TODO: Deduplicate
                 sys.exit()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
