@@ -11,12 +11,21 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.image.load("graphics/player/player_walk_1.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = (0, 300)
+        self.health = 10
 
     def update(self):
         self.move()
 
     def move(self):
         self.rect.x += 1
+
+    def demage(self):
+        self.health -= 5
+        if self.health <= 0:
+            self.kill()
+            return 1
+        else:
+            return 0
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
@@ -51,8 +60,8 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             for enemy in enemies_group:
                 if enemy.rect.collidepoint(event.pos):
-                    enemy.kill()
-                    score += 1
+                    result = enemy.demage()
+                    score += result
 
         ###if event.type == animation_timer:
         ###    pass
