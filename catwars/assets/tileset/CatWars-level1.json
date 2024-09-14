@@ -1,0 +1,48 @@
+{ "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"json",
+         "target":"CatWars-level1-export.tmx"
+        }
+    },
+ "height":9,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,
+            27, 27, 27, 1, 25, 2, 27, 27, 27, 27, 27, 27,
+            27, 27, 1, 12, 19, 11, 2, 27, 27, 27, 27, 1,
+            25, 25, 12, 3, 26, 4, 11, 2, 27, 27, 1, 12,
+            19, 19, 3, 18, 27, 17, 4, 11, 25, 25, 12, 3,
+            26, 26, 18, 27, 27, 27, 17, 4, 19, 19, 3, 18,
+            27, 27, 27, 27, 27, 27, 27, 17, 26, 26, 18, 27,
+            27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27,
+            27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27],
+         "height":9,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":12,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.11.0",
+ "tileheight":64,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"CatWarsTilemap.tsx"
+        }],
+ "tilewidth":64,
+ "type":"map",
+ "version":"1.10",
+ "width":12
+}
