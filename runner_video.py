@@ -4,6 +4,11 @@ import pygame
 import sys
 import random
 
+class GroupWithDispatch(pygame.sprite.Group):
+    def dispatch(self, event):
+        for member in self:
+            member.dispatch(event)
+
 class Options():
     def __init__(self):
         self.width = 800
@@ -80,7 +85,7 @@ clock = pygame.time.Clock()
 
 # Groups
 game = Game(options)
-enemies_group = pygame.sprite.Group()
+enemies_group = GroupWithDispatch()
 
 # Timers
 spawn_timer = pygame.USEREVENT + 1
@@ -93,8 +98,7 @@ while True:
     for event in pygame.event.get():
         game.dispatch(event)
 
-        for enemy in enemies_group:
-            enemy.dispatch(event)
+        enemies_group.dispatch(event)
 
         ###if event.type == animation_timer:
         ###    pass
