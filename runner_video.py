@@ -42,15 +42,11 @@ class Game(pygame.sprite.Sprite):
     def dispatch(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                print(f"SCORE: {self.score}")   # TODO: Deduplicate
-                sys.exit()
+                self._quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
-                    pygame.quit()
-                    print(f"SCORE: {self.score}")   # TODO: Deduplicate
-                    sys.exit()
+                    self._quit()
 
             if event.type == self.enemies_group.spawn_timer:
                 self.enemies_group.add(Enemy(game))
@@ -59,6 +55,11 @@ class Game(pygame.sprite.Sprite):
 
     def update(self):
         self.enemies_group.update()
+
+    def _quit(self):
+        pygame.quit()
+        print(f"SCORE: {self.score}")
+        sys.exit()
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
