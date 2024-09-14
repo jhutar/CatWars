@@ -5,11 +5,14 @@ import sys
 import random
 
 class GroupWithDispatch(pygame.sprite.Group):
+    """Generic sprite group that supports dispatch method."""
     def dispatch(self, event):
+        """Process given event by all members of the group."""
         for member in self:
             member.dispatch(event)
 
 class EnemiesGroup(GroupWithDispatch):
+    """Game specific sprite group of our enemies, also configures timers related to enemies."""
     def __init__(self):
         super().__init__()
 
@@ -17,11 +20,13 @@ class EnemiesGroup(GroupWithDispatch):
         pygame.time.set_timer(self.spawn_timer, 1000)
 
 class Options():
+    """Game specific class just to wrap game settings."""
     def __init__(self):
         self.width = 800
         self.height = 600
 
-class Game(pygame.sprite.Sprite):
+class Game():
+    """Game specific class that wires all peces needed for the bame."""
     def __init__(self, options):
         self.options = options
         self.font = pygame.font.Font("font/Pixeltype.ttf", 50)
@@ -40,6 +45,8 @@ class Game(pygame.sprite.Sprite):
         self.enemies_group.draw(screen)
 
     def dispatch(self):
+        """Iterate through events in the queue and makes sure all child
+           entities have a chance to react to the events as well."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self._quit()
@@ -62,6 +69,7 @@ class Game(pygame.sprite.Sprite):
         sys.exit()
 
 class Enemy(pygame.sprite.Sprite):
+    """Game specific enemy sprite class."""
     def __init__(self, game):
         super().__init__()
 
@@ -95,17 +103,14 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             self.game.score += 1
 
-options = Options()
-
 pygame.init()
+clock = pygame.time.Clock()
+
+options = Options()
+game = Game(options)
+
 screen = pygame.display.set_mode((options.width, options.height))
 pygame.display.set_caption("CatWars")
-clock = pygame.time.Clock()
-###bg_music = pygame.mixer.Sound("audio/music.wav")
-###bg_music.play(loops=-1)
-
-# Groups
-game = Game(options)
 
 # Main loop
 while True:
