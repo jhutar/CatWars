@@ -9,6 +9,13 @@ class GroupWithDispatch(pygame.sprite.Group):
         for member in self:
             member.dispatch(event)
 
+class EnemiesGroup(GroupWithDispatch):
+    def __init__(self):
+        super().__init__()
+
+        self.spawn_timer = pygame.event.custom_type()
+        pygame.time.set_timer(self.spawn_timer, 1000)
+
 class Options():
     def __init__(self):
         self.width = 800
@@ -20,25 +27,38 @@ class Game(pygame.sprite.Sprite):
         self.font = pygame.font.Font("font/Pixeltype.ttf", 50)
         self.score = 0
 
+        # Groups
+        self.enemies_group = EnemiesGroup()
+
     def draw(self, screen):
+        screen.fill("darkgreen")
+
         score_surf = self.font.render(f"Score: {self.score}", False, (200, 50, 100))
         score_rect = score_surf.get_rect(center=(400, 50))
         screen.blit(score_surf, score_rect)
 
-    def dispatch(self, event):
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            print(f"SCORE: {self.score}")   # TODO: Deduplicate
-            sys.exit()
+        self.enemies_group.draw(screen)
 
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
+    def dispatch(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 print(f"SCORE: {self.score}")   # TODO: Deduplicate
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    pygame.quit()
+                    print(f"SCORE: {self.score}")   # TODO: Deduplicate
+                    sys.exit()
+
+            if event.type == self.enemies_group.spawn_timer:
+                self.enemies_group.add(Enemy(game))
+
+            self.enemies_group.dispatch(event)
+
     def update(self):
-        pass
+        self.enemies_group.update()
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game):
@@ -85,34 +105,12 @@ clock = pygame.time.Clock()
 
 # Groups
 game = Game(options)
-enemies_group = GroupWithDispatch()
-
-# Timers
-spawn_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(spawn_timer, 1000)
-###animation_timer = pygame.USEREVENT + 2
-###pygame.time.set_timer(animation_timer, 500)
 
 # Main loop
 while True:
-    for event in pygame.event.get():
-        game.dispatch(event)
-
-        enemies_group.dispatch(event)
-
-        ###if event.type == animation_timer:
-        ###    pass
-
-        if event.type == spawn_timer:
-            enemies_group.add(Enemy(game))
-
-
-    screen.fill("darkgreen")
-
+    game.dispatch()
     game.draw(screen)
-
-    enemies_group.draw(screen)
-    enemies_group.update()
+    game.update()
 
     pygame.display.update()
     clock.tick(30)
