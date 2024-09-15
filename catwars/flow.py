@@ -3,6 +3,7 @@ import os
 import inspect
 
 import catwars.helpers
+import catwars.world
 import catwars.enemies
 
 class Game():
@@ -16,11 +17,14 @@ class Game():
         self.font = pygame.font.Font(os.path.join(self.assets_dir, "font/Pixeltype.ttf"), 50)
         self.score = 0
 
+        # World
+        self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
+
         # Groups
         self.enemies_group = catwars.enemies.EnemiesGroup()
 
     def draw(self, screen):
-        screen.fill("darkgreen")
+        self.world.draw(screen)
 
         score_surf = self.font.render(f"Score: {self.score}", False, (200, 50, 100))
         score_rect = score_surf.get_rect(center=(400, 50))

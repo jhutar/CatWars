@@ -10,7 +10,7 @@ def play():
 
     game = catwars.flow.Game()
 
-    screen = pygame.display.set_mode((game.options.width, game.options.height))
+    screen = pygame.display.set_mode(game.world.world_size)
     pygame.display.set_caption("CatWars")
 
     # Main loop
