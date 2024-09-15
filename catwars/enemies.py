@@ -28,6 +28,11 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (-30, 300)
 
+        # Sounds
+        sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
+        self.jump_sound = pygame.mixer.Sound(sound_path)
+        ###self.jump_sound.set_volume(0.5)
+
         # Entity properties
         self.health = 10
 
@@ -47,6 +52,7 @@ class Enemy(pygame.sprite.Sprite):
         power = random.randint(2, 6)
         self.health -= power
         if self.health <= 0:
+            self.jump_sound.play()
             self.kill()
             self.game.score += 1
 
