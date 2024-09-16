@@ -1,6 +1,7 @@
 import pygame
 import os
 import inspect
+import sys
 
 import catwars.helpers
 import catwars.world
