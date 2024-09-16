@@ -6,6 +6,7 @@ import sys
 import catwars.helpers
 import catwars.world
 import catwars.enemies
+import catwars.towers
 
 class Game():
     """Game specific class that wires all peces needed for the bame."""
@@ -23,6 +24,7 @@ class Game():
 
         # Groups
         self.enemies_group = catwars.enemies.EnemiesGroup()
+        self.towers_group = catwars.towers.TowersGroup(self)
 
     def draw(self, screen):
         self.world.draw(screen)
@@ -32,6 +34,8 @@ class Game():
         screen.blit(score_surf, score_rect)
 
         self.enemies_group.draw(screen)
+
+        self.towers_group.draw(screen)
 
     def dispatch(self):
         """Iterate through events in the queue and makes sure all child
@@ -48,6 +52,7 @@ class Game():
                 self.enemies_group.add(catwars.enemies.Enemy(self))
 
             self.enemies_group.dispatch(event)
+            self.towers_group.dispatch(event)
 
     def update(self):
         self.enemies_group.update()
