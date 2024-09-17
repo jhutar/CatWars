@@ -8,6 +8,26 @@ import catwars.world
 import catwars.enemies
 import catwars.towers
 
+class Score():
+    def __init__(self, game):
+        self.game = game
+        self.font = pygame.font.Font(os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50)
+        self.score = 0
+
+    def __iadd__(self, other):
+        self.score += other
+        return self
+
+    def __isub__(self, other):
+        self.score -= other
+        return self
+
+    def draw(self, screen):
+        score_surf = self.font.render(f"Score: {self.score}", False, (200, 50, 100))
+        score_rect = score_surf.get_rect(center=(400, 50))
+        screen.blit(score_surf, score_rect)
+
+
 class Game():
     """Game specific class that wires all peces needed for the bame."""
     def __init__(self):
@@ -16,10 +36,8 @@ class Game():
         _dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
         self.assets_dir = os.path.join(_dir, "assets/")
 
-        self.font = pygame.font.Font(os.path.join(self.assets_dir, "font/Pixeltype.ttf"), 50)
-        self.score = 0
-
         # World
+        self.score = Score(self)
         self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
 
         # Groups
@@ -29,9 +47,7 @@ class Game():
     def draw(self, screen):
         self.world.draw(screen)
 
-        score_surf = self.font.render(f"Score: {self.score}", False, (200, 50, 100))
-        score_rect = score_surf.get_rect(center=(400, 50))
-        screen.blit(score_surf, score_rect)
+        self.score.draw(screen)
 
         self.enemies_group.draw(screen)
 
