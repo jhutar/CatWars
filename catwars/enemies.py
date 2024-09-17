@@ -13,6 +13,10 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
         self.spawn_timer = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_timer, 1000)
 
+    def draw(self,screen):
+        super().draw(screen)
+        for e in self:
+            e.draw(screen)
 
 class Enemy(pygame.sprite.Sprite):
     """Game specific enemy sprite class."""
@@ -49,6 +53,9 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.x > self.game.options.width:
             self.kill()
             self.game.score -= 3
+
+    def draw(self,screen):
+        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.rect.x, self.rect.y + 100, self.health * 6.5, 5))
 
     def demage(self):
         power = random.randint(2, 6)
