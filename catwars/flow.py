@@ -23,7 +23,7 @@ class Game():
         self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
 
         # Groups
-        self.enemies_group = catwars.enemies.EnemiesGroup()
+        self.enemies_group = catwars.enemies.EnemiesGroup(self)
         self.towers_group = catwars.towers.TowersGroup(self)
 
     def draw(self, screen):
@@ -47,9 +47,6 @@ class Game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self._quit()
-
-            if event.type == self.enemies_group.spawn_timer:
-                self.enemies_group.add(catwars.enemies.Enemy(self))
 
             self.enemies_group.dispatch(event)
             self.towers_group.dispatch(event)

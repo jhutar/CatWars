@@ -7,8 +7,10 @@ import catwars.generics
 
 class EnemiesGroup(catwars.generics.GroupWithDispatch):
     """Game specific sprite group of our enemies, also configures timers related to enemies."""
-    def __init__(self):
+    def __init__(self, game):
         super().__init__()
+
+        self.game = game
 
         self.spawn_timer = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_timer, 1000)
@@ -17,6 +19,13 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
         super().draw(screen)
         for e in self:
             e.draw(screen)
+
+    def dispatch(self, event):
+        if event.type == self.spawn_timer:
+            self.add(Enemy(self.game))
+
+        super().dispatch(event)
+
 
 class Enemy(pygame.sprite.Sprite):
     """Game specific enemy sprite class."""
