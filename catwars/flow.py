@@ -27,6 +27,9 @@ class Score():
         score_rect = score_surf.get_rect(center=(400, 50))
         screen.blit(score_surf, score_rect)
 
+    def print(self):
+        print(f"SCORE: {self.score}")
+
 
 class Game():
     """Game specific class that wires all peces needed for the bame."""
@@ -72,5 +75,5 @@ class Game():
 
     def _quit(self):
         pygame.quit()
-        print(f"SCORE: {self.score}")
+        self.score.print()
         sys.exit()
