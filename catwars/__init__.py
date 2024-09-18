@@ -7,6 +7,7 @@ import catwars.flow
 def play():
     pygame.init()
     clock = pygame.time.Clock()
+    screen = pygame.display.set_mode((1, 1))
 
     game = catwars.flow.Game()
 

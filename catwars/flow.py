@@ -7,6 +7,7 @@ import catwars.helpers
 import catwars.world
 import catwars.enemies
 import catwars.towers
+import catwars.buttons
 
 class Score():
     def __init__(self, game):
@@ -46,6 +47,7 @@ class Game():
         # Groups
         self.enemies_group = catwars.enemies.EnemiesGroup(self)
         self.towers_group = catwars.towers.TowersGroup(self)
+        self.buttons_group = catwars.buttons.ButtonsGroup(self)
 
     def draw(self, screen):
         self.world.draw(screen)
@@ -53,8 +55,8 @@ class Game():
         self.score.draw(screen)
 
         self.enemies_group.draw(screen)
-
         self.towers_group.draw(screen)
+        self.buttons_group.draw(screen)
 
     def dispatch(self):
         """Iterate through events in the queue and makes sure all child
@@ -67,11 +69,17 @@ class Game():
                 if event.key == pygame.K_q:
                     self._quit()
 
-            self.enemies_group.dispatch(event)
-            self.towers_group.dispatch(event)
+            # If this returns True, it means nobody else needs to process the event now
+            if self.buttons_group.dispatch(event):
+                continue
+            if self.enemies_group.dispatch(event):
+                continue
+            if self.towers_group.dispatch(event):
+                continue
 
     def update(self):
         self.enemies_group.update()
+        self.buttons_group.update()
 
     def _quit(self):
         pygame.quit()

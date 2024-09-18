@@ -15,10 +15,11 @@ class TowersGroup(pygame.sprite.Group):
         ###pygame.time.set_timer(self.spawn_timer, 1000)
 
     def dispatch(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            for tile in self.game.world:
-                if tile.rect.collidepoint(event.pos):
-                    self.add(Tower(self.game, tile.rect.topleft))
+        if self.game.buttons_group.build_button.active:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for tile in self.game.world:
+                    if tile.rect.collidepoint(event.pos):
+                        self.add(Tower(self.game, tile.rect.topleft))
 
 
 class Tower(pygame.sprite.Sprite):
