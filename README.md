@@ -3,6 +3,12 @@ CatWars
 
 Tower defence style game where cats are guarding their reams against various enemies.
 
+Assets
+------
+
+* Clear Code: Initial assets from [Ultimate PyGame Intro](https://github.com/clear-code-projects/UltimatePygameIntro)
+* Charles Sanchez (AKA CharlesGabriel): `slime.png` monster from [Liberated Pixel Cup (LPC) Base Assets (sprites & map tiles)](https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles)
+
 Resources
 ---------
 
