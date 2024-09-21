@@ -8,6 +8,7 @@ import catwars.world
 import catwars.enemies
 import catwars.towers
 import catwars.buttons
+import catwars.pathfinding
 
 class Score():
     def __init__(self, game):
@@ -43,6 +44,8 @@ class Game():
         # World
         self.score = Score(self)
         self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
+        self.pathfinding = catwars.pathfinding.Pathfinding(self)
+        self.pathfinding.find((0, 0), (10, 8))
 
         # Timer for animations
         self.animation_timer = pygame.event.custom_type()
