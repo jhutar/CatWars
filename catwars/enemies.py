@@ -15,6 +15,9 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
         self.spawn_timer = pygame.event.custom_type()
         pygame.time.set_timer(self.spawn_timer, 1000)
 
+        self.animation_timer = pygame.event.custom_type()
+        pygame.time.set_timer(self.animation_timer, 200)
+
     def draw(self,screen):
         super().draw(screen)
         for e in self:
@@ -36,8 +39,17 @@ class Enemy(pygame.sprite.Sprite):
         self.game = game
 
         # Sprite necessities
-        img_path = os.path.join(self.game.assets_dir, "graphics/player/player_walk_1.png")
-        self.image = pygame.image.load(img_path).convert_alpha()
+        self.images = []
+        self.index = 0
+        spritesheet_path = os.path.join(self.game.assets_dir, "graphics/enemies/slime.png")
+        spritesheet = pygame.image.load(spritesheet_path).convert_alpha()
+        for i in range(3):
+            rect = pygame.Rect((i * 32, 0, 32, 32))
+            image = pygame.Surface(rect.size).convert_alpha()
+            image.blit(spritesheet, (0, 0), rect)
+            image.set_colorkey((0,0,0))
+            self.images.append(image)
+        self.image = self.images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = (-30, 300)
 
@@ -55,9 +67,17 @@ class Enemy(pygame.sprite.Sprite):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.demage()
+                return
+
+        if event.type == self.game.enemies_group.animation_timer:
+            self.index += 1
+            self.index = self.index % len(self.images)
+            return
 
     def update(self):
         self.rect.x += 5
+
+        self.image = self.images[self.index]
 
         if self.rect.x > self.game.options.width:
             self.kill()
