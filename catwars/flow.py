@@ -44,6 +44,10 @@ class Game():
         self.score = Score(self)
         self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
 
+        # Timer for animations
+        self.animation_timer = pygame.event.custom_type()
+        pygame.time.set_timer(self.animation_timer, 200)
+
         # Groups
         self.enemies_group = catwars.enemies.EnemiesGroup(self)
         self.towers_group = catwars.towers.TowersGroup(self)
