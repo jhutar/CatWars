@@ -41,6 +41,8 @@ class Game():
         _dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
         self.assets_dir = os.path.join(_dir, "assets/")
 
+        self.is_active = True
+
         # World
         self.score = Score(self)
         self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
@@ -69,6 +71,9 @@ class Game():
         """Iterate through events in the queue and makes sure all child
            entities have a chance to react to the events as well."""
         for event in pygame.event.get():
+            if not self.is_active:
+                self._quit()
+
             if event.type == pygame.QUIT:
                 self._quit()
 

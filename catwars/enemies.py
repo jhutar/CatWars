@@ -29,10 +29,6 @@ class Waves():
                     "slime": 2,   # Count in each burst
                 },
             },
-            {
-                "type": "idle",
-                "delay": 10,
-            },
         ]
         self._index = 0
 
@@ -50,7 +46,26 @@ class Waves():
             self.handle_burst()
 
     def handle_wave(self):
-        config = self._data[self._index]
+        # Handle case during init when we are initializing group
+        enemies_group_initializing = "enemies_group" not in dir(self.game)
+
+        # No more waves available
+        no_more_waves = self._index >= len(self._data)
+
+        # If there are no enemies and there is no more waves, quit
+        if not enemies_group_initializing:
+            if len(self.game.enemies_group) == 0:
+                if no_more_waves:
+                    self.game.is_active = False
+                    return
+
+        # If we are still running and there are no more waves, just sleep
+        if no_more_waves:
+            config = {"type": "idle", "delay": 1}
+        else:
+            config = self._data[self._index]
+
+        # Process the wave
         if config["type"] == "idle":
             pygame.time.set_timer(self.wave_timer, config["delay"] * 1000, loops=1)
             self._index += 1
