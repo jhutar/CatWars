@@ -96,7 +96,18 @@ class Enemy(catwars.generics.AnimatedSprite):
     def __init__(self, game, spritesheet_path, spritesheet_size, spritesheet_config):
         super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
 
-        self.rect.center = (-30, 300)
+        # Spawn point
+        spawn_tiles = self.game.route[0]
+        spawn = self.game.world.convert_tiles_to_coords(*spawn_tiles)
+        self.rect.topleft = spawn
+
+        # Movement
+        self.speed = 1
+        target_tiles = self.game.route[1]
+        target = self.game.world.convert_tiles_to_coords(*target_tiles)
+        spawn_vec = pygame.math.Vector2(*spawn)
+        target_vec = pygame.math.Vector2(*target)
+        self.direction = (target_vec - spawn_vec).normalize()
 
         # Sounds
         sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
@@ -116,7 +127,7 @@ class Enemy(catwars.generics.AnimatedSprite):
     def update(self):
         super().update()
 
-        self.rect.x += self.speed
+        self.rect.topleft += self.direction * self.speed
 
         if self.rect.x > self.game.options.width:
             self.kill()
