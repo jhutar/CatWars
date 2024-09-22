@@ -5,15 +5,80 @@ import random
 import catwars.generics
 
 
+class Waves():
+    """Waves of enemies in level."""
+    def __init__(self, game):
+        self._data = [
+            {
+                "type": "attack",
+                "bursts": 2,
+                "delay": 0.3,   # Delay between bursts
+                "enemies": {
+                    "slime": 2,   # Count in each burst
+                },
+            },
+            {
+                "type": "idle",
+                "delay": 3,
+            },
+            {
+                "type": "attack",
+                "bursts": 2,
+                "delay": 0.6,   # Delay between bursts
+                "enemies": {
+                    "slime": 2,   # Count in each burst
+                },
+            },
+            {
+                "type": "idle",
+                "delay": 10,
+            },
+        ]
+        self._index = 0
+
+        self.game = game
+        self.wave_timer = pygame.event.custom_type()   # next waive
+        self.burst_timer = pygame.event.custom_type()   # next burst in current waive
+
+        self.handle_wave()
+
+    def dispatch(self, event):
+        if event.type == self.wave_timer:
+            self.handle_wave()
+
+        if event.type == self.burst_timer:
+            self.handle_burst()
+
+    def handle_wave(self):
+        config = self._data[self._index]
+        if config["type"] == "idle":
+            pygame.time.set_timer(self.wave_timer, config["delay"] * 1000, loops=1)
+            self._index += 1
+        else:
+            pygame.time.set_timer(self.burst_timer, int(config["delay"] * 1000), loops=config["bursts"])
+            self._burst_counter = 0
+
+    def handle_burst(self):
+        config = self._data[self._index]
+        for enemy, count in config["enemies"].items():
+            for i in range(count):
+                match enemy:
+                    case "slime":
+                        self.game.enemies_group.add(Slime(self.game))
+                    case _:
+                        raise Exception("Unsupported enemy type in wave config")
+        self._burst_counter += 1
+        if self._burst_counter == config["bursts"]:
+            self._index += 1
+            self.handle_wave()
+
 class EnemiesGroup(catwars.generics.GroupWithDispatch):
     """Game specific sprite group of our enemies, also configures timers related to enemies."""
     def __init__(self, game):
         super().__init__()
 
         self.game = game
-
-        self.spawn_timer = pygame.event.custom_type()
-        pygame.time.set_timer(self.spawn_timer, 1000)
+        self.waves = Waves(self.game)
 
     def draw(self,screen):
         super().draw(screen)
@@ -21,8 +86,7 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
             e.draw(screen)
 
     def dispatch(self, event):
-        if event.type == self.spawn_timer:
-            self.add(Slime(self.game))
+        self.waves.dispatch(event)
 
         super().dispatch(event)
 
