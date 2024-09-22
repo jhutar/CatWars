@@ -37,7 +37,7 @@ class World(pygame.sprite.Group):
     def is_walkable(self, x, y):
         return self.tmxdata.get_tile_properties(x, y, 0)["can_walk"]
 
-    def convert_tiles_to_coords(self, x_tiles, y_tiles):
+    def convert_tiles_to_coord(self, x_tiles, y_tiles):
         x = x_tiles * self.tmxdata.tilewidth
         y = y_tiles * self.tmxdata.tileheight
-        return (x, y)
+        return pygame.math.Vector2(x, y)

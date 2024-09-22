@@ -97,17 +97,16 @@ class Enemy(catwars.generics.AnimatedSprite):
         super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
 
         # Spawn point
-        spawn_tiles = self.game.route[0]
-        spawn = self.game.world.convert_tiles_to_coords(*spawn_tiles)
+        spawn = self.game.world.convert_tiles_to_coord(*self.game.route[0])
         self.rect.topleft = spawn
 
         # Movement
         self.speed = 1
-        target_tiles = self.game.route[1]
-        target = self.game.world.convert_tiles_to_coords(*target_tiles)
-        spawn_vec = pygame.math.Vector2(*spawn)
-        target_vec = pygame.math.Vector2(*target)
-        self.direction = (target_vec - spawn_vec).normalize()
+        self.direction = pygame.math.Vector2(0, 0)
+
+        # Navigation
+        self.target_index = 0
+        self.handle_next_target()
 
         # Sounds
         sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
@@ -129,9 +128,8 @@ class Enemy(catwars.generics.AnimatedSprite):
 
         self.rect.topleft += self.direction * self.speed
 
-        if self.rect.x > self.game.options.width:
-            self.kill()
-            self.game.score -= 3
+        if self.rect.collidepoint(self.target):
+            self.handle_next_target()
 
     def draw(self, screen):
         # Health bar
@@ -146,6 +144,21 @@ class Enemy(catwars.generics.AnimatedSprite):
             self.game.score += 1
         else:
             self.demaaage_sound.play()
+
+    def handle_next_target(self):
+        """Update target to next one."""
+        self.target_index += 1
+
+        # Enemy reached final target
+        if self.target_index == len(self.game.route):
+            self.kill()
+            self.game.score -= 3
+            return
+
+        # Select another step from the route
+        self.target = self.game.world.convert_tiles_to_coord(*self.game.route[self.target_index])
+        current = self.rect.topleft
+        self.direction = (pygame.math.Vector2(*self.target) - current).normalize()
 
 
 class Slime(Enemy):
