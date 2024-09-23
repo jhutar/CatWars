@@ -11,24 +11,32 @@ class Waves():
         self._data = [
             {
                 "type": "attack",
-                "bursts": 2,
+                "bursts": 1,
                 "delay": 0.3,   # Delay between bursts
                 "enemies": {
-                    "slime": 2,   # Count in each burst
+                    "slime": 1,   # Count in each burst
                 },
             },
-            {
-                "type": "idle",
-                "delay": 3,
-            },
-            {
-                "type": "attack",
-                "bursts": 2,
-                "delay": 0.6,   # Delay between bursts
-                "enemies": {
-                    "slime": 2,   # Count in each burst
-                },
-            },
+            #{
+            #    "type": "attack",
+            #    "bursts": 2,
+            #    "delay": 0.3,   # Delay between bursts
+            #    "enemies": {
+            #        "slime": 2,   # Count in each burst
+            #    },
+            #},
+            #{
+            #    "type": "idle",
+            #    "delay": 3,
+            #},
+            #{
+            #    "type": "attack",
+            #    "bursts": 2,
+            #    "delay": 0.6,   # Delay between bursts
+            #    "enemies": {
+            #        "slime": 2,   # Count in each burst
+            #    },
+            #},
         ]
         self._index = 0
 
@@ -173,7 +181,7 @@ class Enemy(catwars.generics.AnimatedSprite):
         # Select another step from the route
         self.target = self.game.world.convert_tiles_to_coord(*self.game.route[self.target_index])
         current = self.rect.topleft
-        self.direction = (pygame.math.Vector2(*self.target) - current).normalize()
+        self.direction = (self.target - current).normalize()
 
 
 class Slime(Enemy):
