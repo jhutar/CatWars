@@ -129,7 +129,7 @@ class Enemy(catwars.generics.AnimatedSprite):
 
         # Navigation
         self.target_index = 0
-        self.handle_next_target()
+        self.update_target()
 
         # Sounds
         sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
@@ -149,10 +149,10 @@ class Enemy(catwars.generics.AnimatedSprite):
     def update(self):
         super().update()
 
-        self.rect.topleft += self.direction * self.speed
+        self.rect.center += self.direction * self.speed
 
-        if self.rect.collidepoint(self.target):
-            self.handle_next_target()
+        if self.rect.colliderect(self.target_rect):
+            self.update_target()
 
     def draw(self, screen):
         # Health bar
@@ -168,20 +168,26 @@ class Enemy(catwars.generics.AnimatedSprite):
         else:
             self.demaaage_sound.play()
 
-    def handle_next_target(self):
-        """Update target to next one."""
+    def update_target(self):
+        """Update target to next one and if there is no next, this enemy made it to the end."""
         self.target_index += 1
 
-        # Enemy reached final target
-        if self.target_index == len(self.game.route):
+        try:
+            # Select another step from the route
+            target = self.game.route[self.target_index]
+            self.target_rect = self.game.world.map[target.x][target.y].rect
+            self.update_direction()
+        except IndexError:
+            # Enemy reached final target
             self.kill()
             self.game.score -= 3
             return
 
-        # Select another step from the route
-        self.target = self.game.world.convert_tiles_to_coord(*self.game.route[self.target_index])
-        current = self.rect.topleft
-        self.direction = (self.target - current).normalize()
+    def update_direction(self):
+        """Update direction of this enamy."""
+        start_vec = pygame.math.Vector2(self.rect.center)
+        end_vec = pygame.math.Vector2(self.target_rect.center)
+        self.direction = (end_vec - start_vec).normalize()
 
 
 class Slime(Enemy):
