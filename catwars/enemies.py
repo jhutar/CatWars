@@ -17,6 +17,14 @@ class Waves():
                     "slime": 1,   # Count in each burst
                 },
             },
+            {
+                "type": "attack",
+                "bursts": 1,
+                "delay": 0.3,   # Delay between bursts
+                "enemies": {
+                    "bat": 1,   # Count in each burst
+                },
+            },
             #{
             #    "type": "attack",
             #    "bursts": 2,
@@ -88,6 +96,8 @@ class Waves():
                 match enemy:
                     case "slime":
                         self.game.enemies_group.add(Slime(self.game))
+                    case "bat":
+                        self.game.enemies_group.add(Bat(self.game))
                     case _:
                         raise Exception("Unsupported enemy type in wave config")
         self._burst_counter += 1
@@ -217,5 +227,35 @@ class Slime(Enemy):
 
         # Properties
         self.speed = 3
+        self.health = 10
+        self.set_action("walk_east")
+
+class Bat(Enemy):
+    def __init__(self, game):
+        spritesheet_path = "graphics/enemies/bat.png"
+        spritesheet_size = (32, 32)
+        spritesheet_config = [
+            {
+                "action": "walk_north",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_west",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_south",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_east",
+                "order": [0, 1, 2, 1],
+            },
+        ]
+
+        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+
+        # Properties
+        self.speed = 7.5
         self.health = 10
         self.set_action("walk_east")
