@@ -133,7 +133,7 @@ class Enemy(catwars.generics.AnimatedSprite):
 
         # Spawn point
         spawn = self.game.world.convert_tiles_to_coord(*self.game.route[0])
-        self.rect.topleft = spawn
+        self.rect.topleft = spawn + (random.randint(-8, 8), random.randint(-8, 8))
 
         # Movement
         self.speed = 1
@@ -165,8 +165,20 @@ class Enemy(catwars.generics.AnimatedSprite):
     def update(self):
         super().update()
 
-        self.rect.center += self.direction * self.speed
+        change = self.direction * self.speed
+        new_center = self.rect.center + change
 
+        # Detect if we are coliding with some other enemy
+        for e in self.game.enemies_group:
+            if e == self:
+                continue
+            if (e.rect.center - new_center).length() < 8:
+                new_center += (random.randint(-4, 4), random.randint(-4, 4))
+                break
+        self.rect.center = new_center
+        self.update_direction()
+
+        # If we reached another waypoint
         if self.rect.colliderect(self.target_rect):
             self.update_target()
 
