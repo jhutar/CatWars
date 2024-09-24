@@ -143,6 +143,10 @@ class Enemy(catwars.generics.AnimatedSprite):
         self.target_index = 0
         self.update_target()
 
+        # Defaults
+        self.health = 0   # initial health value of the enemy, configured in specific class
+        self.health_current = None   # current value of enemy health, if None, will be set based on self health on first use
+
         # Sounds
         sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
         self.demaaage_sound = pygame.mixer.Sound(sound_path)
@@ -167,15 +171,26 @@ class Enemy(catwars.generics.AnimatedSprite):
             self.update_target()
 
     def draw(self, screen):
+        # TODO: This is duplicated, figure out better way
+        if self.health_current is None:
+            self.health_current = self.health
+
         # Health bar
-        color = (255, 0, 0)
-        rect = pygame.Rect(self.rect.x, self.rect.y + 45 , self.health * x == 32, 5)
-        pygame.draw.rect(screen, color, rect)
+        rect = pygame.Rect(self.rect.x, self.rect.y - 5, 32, 5)
+        pygame.draw.rect(screen, (0, 0, 0), rect, border_radius=2)
+        width = self.health_current / self.health * 30
+        rect = pygame.Rect(self.rect.x + 1, self.rect.y - 4, width, 3)
+        pygame.draw.rect(screen, (255, 0, 0), rect, border_radius=2)
 
     def demage(self):
+        # TODO: This is duplicated, figure out better way
+        if self.health_current is None:
+            self.health_current = self.health
+
         power = random.randint(2, 6)
-        self.health -= power
-        if self.health <= 0:
+        self.health_current -= power
+
+        if self.health_current <= 0:
             self.deeead_sound.play()
             self.kill()
             self.game.score += 1
