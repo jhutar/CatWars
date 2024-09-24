@@ -22,29 +22,29 @@ class Waves():
                 "bursts": 1,
                 "delay": 0.3,   # Delay between bursts
                 "enemies": {
-                    "bat": 1,   # Count in each burst
+                    "slime": 1,   # Count in each burst
                 },
             },
-            #{
-            #    "type": "attack",
-            #    "bursts": 2,
-            #    "delay": 0.3,   # Delay between bursts
-            #    "enemies": {
-            #        "slime": 2,   # Count in each burst
-            #    },
-            #},
-            #{
-            #    "type": "idle",
-            #    "delay": 3,
-            #},
-            #{
-            #    "type": "attack",
-            #    "bursts": 2,
-            #    "delay": 0.6,   # Delay between bursts
-            #    "enemies": {
-            #        "slime": 2,   # Count in each burst
-            #    },
-            #},
+            {
+                "type": "attack",
+                "bursts": 2,
+                "delay": 0.3,   # Delay between bursts
+                "enemies": {
+                    "bat": 2,   # Count in each burst
+                },
+            },
+            {
+                "type": "idle",
+                "delay": 3,
+            },
+            {
+                "type": "attack",
+                "bursts": 2,
+                "delay": 0.6,   # Delay between bursts
+                "enemies": {
+                    "ghost": 2,   # Count in each burst
+                },
+            },
         ]
         self._index = 0
 
@@ -98,6 +98,8 @@ class Waves():
                         self.game.enemies_group.add(Slime(self.game))
                     case "bat":
                         self.game.enemies_group.add(Bat(self.game))
+                    case "ghost":
+                        self.game.enemies_group.add(Ghost(self.game))
                     case _:
                         raise Exception("Unsupported enemy type in wave config")
         self._burst_counter += 1
@@ -267,5 +269,35 @@ class Bat(Enemy):
 
         # Properties
         self.speed = 7.5
-        self.health = 20
+        self.health = 5
+        self.set_action("walk_east")
+
+class Ghost(Enemy):
+    def __init__(self, game):
+        spritesheet_path = "graphics/enemies/ghost.png"
+        spritesheet_size = (32, 32)
+        spritesheet_config = [
+            {
+                "action": "walk_north",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_west",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_south",
+                "order": [0, 1, 2, 1],
+            },
+            {
+                "action": "walk_east",
+                "order": [0, 1, 2, 1],
+            },
+        ]
+
+        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+
+        # Properties
+        self.speed = 5
+        self.health = 25
         self.set_action("walk_east")
