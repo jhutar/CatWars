@@ -166,7 +166,9 @@ class Enemy(catwars.generics.AnimatedSprite):
 
     def draw(self, screen):
         # Health bar
-        pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.rect.x, self.rect.y + 100, self.health * 6.5, 5))
+        color = (255, 0, 0)
+        rect = pygame.Rect(self.rect.x, self.rect.y + 45 , self.health * x == 32, 5)
+        pygame.draw.rect(screen, color, rect)
 
     def demage(self):
         power = random.randint(2, 6)
@@ -265,5 +267,5 @@ class Bat(Enemy):
 
         # Properties
         self.speed = 7.5
-        self.health = 10
+        self.health = 20
         self.set_action("walk_east")
