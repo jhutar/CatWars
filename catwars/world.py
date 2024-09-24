@@ -35,7 +35,11 @@ class World(pygame.sprite.Group):
                     self.add(GroundTile(tile[2], (x_top_left, y_top_left)))
 
     def is_walkable(self, x, y):
-        return self.tmxdata.get_tile_properties(x, y, 0)["can_walk"]
+        props = self.tmxdata.get_tile_properties(x, y, 0)
+        if props is None:
+            return False   # If no tile is specified in the map
+        else:
+            return props["can_walk"]
 
     def convert_tiles_to_coord(self, x_tiles, y_tiles):
         x = x_tiles * self.tmxdata.tilewidth

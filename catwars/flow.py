@@ -45,9 +45,9 @@ class Game():
 
         # World
         self.score = Score(self)
-        self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/CatWars-level1.tmx"))
+        self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/level1.tmx"))
         self.pathfinding = catwars.pathfinding.Pathfinding(self)
-        self.route = self.pathfinding.find((0, 4), (11, 1))
+        self.route = self.pathfinding.find((0, 5), (23, 13))
 
         # Timer for animations
         self.animation_timer = pygame.event.custom_type()
