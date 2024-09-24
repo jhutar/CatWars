@@ -198,6 +198,14 @@ class Enemy(catwars.generics.AnimatedSprite):
         start_vec = pygame.math.Vector2(self.rect.center)
         end_vec = pygame.math.Vector2(self.target_rect.center)
         self.direction = (end_vec - start_vec).normalize()
+        if self.direction.x > self.direction.y and self.direction.y < 0:
+            self.set_action("walk_north")
+        if self.direction.x < self.direction.y and self.direction.x < 0:
+            self.set_action("walk_west")
+        if self.direction.x < self.direction.y and self.direction.y > 0:
+            self.set_action("walk_south")
+        if self.direction.x > self.direction.y and self.direction.x > 0:
+            self.set_action("walk_east")
 
 
 class Slime(Enemy):
