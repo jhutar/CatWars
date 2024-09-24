@@ -23,7 +23,6 @@ class Button(pygame.sprite.Sprite):
 
         # Sprite necessities
         img_path_idle = os.path.join(self.game.assets_dir, "graphics/ui/button-build-idle.png")
-        print(">>>", img_path_idle)
         i = pygame.image.load(img_path_idle).convert_alpha()
         img_path_active = os.path.join(self.game.assets_dir, "graphics/ui/button-build-active.png")
         self.images = {
