@@ -7,6 +7,7 @@ import catwars.helpers
 import catwars.world
 import catwars.enemies
 import catwars.towers
+import catwars.projectiles
 import catwars.buttons
 import catwars.pathfinding
 
@@ -56,6 +57,7 @@ class Game():
         # Groups
         self.enemies_group = catwars.enemies.EnemiesGroup(self)
         self.towers_group = catwars.towers.TowersGroup(self)
+        self.projectiles_group = catwars.projectiles.ProjectilesGroup(self)
         self.buttons_group = catwars.buttons.ButtonsGroup(self)
 
     def draw(self, screen):
@@ -65,6 +67,7 @@ class Game():
 
         self.enemies_group.draw(screen)
         self.towers_group.draw(screen)
+        self.projectiles_group.draw(screen)
         self.buttons_group.draw(screen)
 
     def dispatch(self):
@@ -91,6 +94,8 @@ class Game():
 
     def update(self):
         self.enemies_group.update()
+        self.towers_group.update()
+        self.projectiles_group.update()
         self.buttons_group.update()
 
     def _quit(self):
