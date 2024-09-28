@@ -46,7 +46,7 @@ class Game():
 
         # World
         self.score = Score(self)
-        self.world = catwars.world.World(os.path.join(self.assets_dir, "tileset/level1.tmx"))
+        self.world = catwars.world.World(os.path.join(self.assets_dir, "levels/level1.tmx"))
         self.pathfinding = catwars.pathfinding.Pathfinding(self)
         self.route = self.pathfinding.find((0, 5), (23, 13))
 
