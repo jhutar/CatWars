@@ -30,8 +30,12 @@ class Enemy(catwars.generics.AnimatedSprite):
     def __init__(self, game, spritesheet_path, spritesheet_size, spritesheet_config):
         super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
 
+        # Select my route
+        self.route = random.choice(self.game.routes)
+        print("Picked", self.route[0].rect.x, self.route[0].rect.y)
+
         # Spawn point
-        spawn = self.game.world.convert_tiles_to_coord(*self.game.route[0])
+        spawn = pygame.math.Vector2(self.route[0].rect.center)
         self.rect.topleft = spawn + (random.randint(-8, 8), random.randint(-8, 8))
 
         # Movement
@@ -114,8 +118,7 @@ class Enemy(catwars.generics.AnimatedSprite):
 
         try:
             # Select another step from the route
-            target = self.game.route[self.target_index]
-            self.target_rect = self.game.world.map[target.x][target.y].rect
+            self.target_rect = self.route[self.target_index].rect
             self.update_direction()
         except IndexError:
             # Enemy reached final target
