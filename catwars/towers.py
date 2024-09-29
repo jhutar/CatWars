@@ -16,16 +16,31 @@ class TowersGroup(pygame.sprite.Group):
         self.shoot_timer = pygame.event.custom_type()
         pygame.time.set_timer(self.shoot_timer, 1000)
 
+        self.considered_tower = None
+
     def dispatch(self, event):
         if event.type == self.shoot_timer:
             self.consider_shooting()
 
         if self.game.buttons_group.build_button.active:
+            if event.type == pygame.MOUSEMOTION:
+                colrow = self.game.world.convert_coords_to_tiles(*event.pos)
+                print(f"Considering building tower on {event.pos} -> {colrow}")
+                self.considered_tower = Tower(self.game, self.game.world.map[colrow[0]][colrow[1]].rect.topleft)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for tile in self.game.world:
                     if tile.rect.collidepoint(event.pos):
                         self.add(Tower(self.game, tile.rect.topleft))
                         #print(f"Adding tower to {tile.rect.topleft}")
+
+    def draw(self, screen):
+        super().draw(screen)
+
+        if self.considered_tower is not None:
+            screen.blit(self.considered_tower, self.considered_tower.rect)
+
+    def consider_placing(self):
+        pass
 
     def consider_shooting(self):
         for tower in self:
