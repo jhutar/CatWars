@@ -25,19 +25,20 @@ class TowersGroup(pygame.sprite.Group):
         if self.game.buttons_group.build_button.active:
             if event.type == pygame.MOUSEMOTION:
                 colrow = self.game.world.convert_coords_to_tiles(*event.pos)
-                print(f"Considering building tower on {event.pos} -> {colrow}")
-                self.considered_tower = Tower(self.game, self.game.world.map[colrow[0]][colrow[1]].rect.topleft)
+                topleft = self.game.world.convert_tiles_to_coord(*colrow)
+                self.considered_tower = Tower(self.game, topleft, considered=True)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
-                for tile in self.game.world:
-                    if tile.rect.collidepoint(event.pos):
-                        self.add(Tower(self.game, tile.rect.topleft))
-                        #print(f"Adding tower to {tile.rect.topleft}")
+                colrow = self.game.world.convert_coords_to_tiles(*event.pos)
+                topleft = self.game.world.convert_tiles_to_coord(*colrow)
+                if self.considered_tower.considered_possible:
+                    self.add(Tower(self.game, topleft))
 
     def draw(self, screen):
         super().draw(screen)
 
         if self.considered_tower is not None:
-            screen.blit(self.considered_tower, self.considered_tower.rect)
+            self.considered_tower.draw(screen)
 
     def consider_placing(self):
         pass
@@ -73,7 +74,7 @@ class TowersGroup(pygame.sprite.Group):
 
 class Tower(pygame.sprite.Sprite):
     """Game specific tower sprite class."""
-    def __init__(self, game, topleft):
+    def __init__(self, game, topleft, considered=False):
         super().__init__()
 
         self.game = game
@@ -81,8 +82,34 @@ class Tower(pygame.sprite.Sprite):
         # Properties
         self.range = 300
 
+        # Considered tower properties
+        self.considered = considered
+        self.considered_possible = False
+
         # Sprite necessities
         img_path = os.path.join(self.game.assets_dir, "graphics/tower.png")
         self.image = pygame.image.load(img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = topleft
+
+        # If this is just a considered tower
+        if self.considered:
+            self.image.set_alpha(191)
+
+    def draw(self, screen, unable=[]):
+        """This is only used when drawing considered tower during choosing place."""
+        possible = True
+        colrow = self.game.world.convert_coords_to_tiles(*self.rect.topleft)
+        for c in range(2):
+            for r in range(2):
+                rect = pygame.Rect(c * 32, r * 32, 32, 32)
+                surf = self.image.subsurface(rect)
+                not_buildable = not self.game.world.can_build(colrow[0] + c, colrow[1] + r)
+                rect.x += self.rect.x
+                rect.y += self.rect.y
+                collides = rect.collidelist([t.rect for t in self.game.towers_group]) != -1
+                if not_buildable or collides:
+                    surf.fill("red", special_flags=pygame.BLEND_RGBA_MIN)
+                    possible = False
+                screen.blit(surf, rect)
+        self.considered_possible = possible

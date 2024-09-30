@@ -61,12 +61,19 @@ class World(pygame.sprite.Group):
                 tile = self.map[tile_coords[0]][tile_coords[1]]
                 self.ends.append(tile)
 
-    def is_walkable(self, x, y):
-        props = self.map[x][y].props
+    def is_walkable(self, c, r):
+        props = self.map[c][r].props
         if props is None:
             return False   # If no tile is specified in the map
         else:
             return props["can_walk"]
+
+    def can_build(self, c, r):
+        props = self.map[c][r].props
+        if props is None:
+            return False   # If no tile is specified in the map
+        else:
+            return props["can_build"]
 
     def convert_tiles_to_coord(self, column, row):
         """Convert (column, row) tile spec on the map to (x, y) in pixels on the map."""
