@@ -1,5 +1,6 @@
 import pygame
 import pytmx
+import copy
 
 class GroundTile(pygame.sprite.Sprite):
     """
@@ -41,14 +42,25 @@ class World(pygame.sprite.Group):
             self.map.append(col)
 
         # Create all the tiles and add them to the group and also to the map for easier refference
-        for layer in tmxdata:
-            if layer.name == "ground":
+        for layer_number, layer in enumerate(tmxdata):
+            if layer.name.startswith("ground-"):
                 for tile in layer.tiles():
-                    topleft = self.convert_tiles_to_coord(tile[0], tile[1])
-                    props = tmxdata.get_tile_properties(tile[0], tile[1], 0)
-                    tile_obj = GroundTile(tile[2], topleft, (tile[0], tile[1]), props)
-                    self.add(tile_obj)   # adding tile sprite to the group
-                    self.map[tile[0]][tile[1]] = tile_obj   # adding tile to the map
+                    props = tmxdata.get_tile_properties(tile[0], tile[1], layer_number)
+                    props = copy.copy(props)   # pytmx returns refference to one dict if it is same, so make things easier by copying
+
+                    if self.map[tile[0]][tile[1]] is None:
+                        # We do not have tile for this (col, row), so create new one
+                        topleft = self.convert_tiles_to_coord(tile[0], tile[1])
+                        tile_obj = GroundTile(tile[2], topleft, (tile[0], tile[1]), props)
+                        self.add(tile_obj)   # adding tile sprite to the group
+                        self.map[tile[0]][tile[1]] = tile_obj   # adding tile to the map
+                    else:
+                        # We already have tile for this (col, row), so merge new one
+                        tile_obj = self.map[tile[0]][tile[1]]
+                        tile_obj.image = copy.copy(tile_obj.image)   # same tiles are refferences to same image
+                        tile_obj.image.blit(tile[2], (0, 0))
+                        tile_obj.props["can_walk"] &= props["can_walk"]
+                        tile_obj.props["can_build"] &= props["can_build"]
 
         # Load waypoints
         for obj in tmxdata.objects:
