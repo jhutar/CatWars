@@ -26,13 +26,13 @@ class TowersGroup(pygame.sprite.Group):
             if event.type == pygame.MOUSEMOTION:
                 colrow = self.game.world.convert_coords_to_tiles(*event.pos)
                 topleft = self.game.world.convert_tiles_to_coord(*colrow)
-                self.considered_tower = Tower(self.game, topleft, considered=True)
+                self.considered_tower = BaseTower(self.game, topleft, considered=True)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 colrow = self.game.world.convert_coords_to_tiles(*event.pos)
                 topleft = self.game.world.convert_tiles_to_coord(*colrow)
                 if self.considered_tower.considered_possible:
-                    self.add(Tower(self.game, topleft))
+                    self.add(BaseTower(self.game, topleft, considered=False))
                     self.stop_building()
 
     def draw(self, screen):
@@ -76,7 +76,7 @@ class TowersGroup(pygame.sprite.Group):
 
 class Tower(pygame.sprite.Sprite):
     """Game specific tower sprite class."""
-    def __init__(self, game, topleft, considered=False):
+    def __init__(self, game, topleft, spritesheet_path, considered=False):
         super().__init__()
 
         self.game = game
@@ -89,7 +89,7 @@ class Tower(pygame.sprite.Sprite):
         self.considered_possible = False
 
         # Sprite necessities
-        img_path = os.path.join(self.game.assets_dir, "graphics/tower2.png")
+        img_path = os.path.join(self.game.assets_dir, spritesheet_path)
         self.image = pygame.image.load(img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = topleft
@@ -118,3 +118,13 @@ class Tower(pygame.sprite.Sprite):
                     possible = False
                 screen.blit(surf, rect)
         self.considered_possible = possible
+
+
+class BaseTower(Tower):
+    def __init__(self, game, topleft, considered=False):
+        spritesheet_path = "graphics/tower2.png"
+
+        super().__init__(game, topleft, spritesheet_path, considered)
+
+        # Properties
+        self.range = 300
