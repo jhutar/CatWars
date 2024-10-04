@@ -33,15 +33,13 @@ class TowersGroup(pygame.sprite.Group):
                 topleft = self.game.world.convert_tiles_to_coord(*colrow)
                 if self.considered_tower.considered_possible:
                     self.add(Tower(self.game, topleft))
+                    self.stop_building()
 
     def draw(self, screen):
         super().draw(screen)
 
         if self.considered_tower is not None:
             self.considered_tower.draw(screen)
-
-    def consider_placing(self):
-        pass
 
     def consider_shooting(self):
         for tower in self:
@@ -70,6 +68,10 @@ class TowersGroup(pygame.sprite.Group):
                 #print(f"Closes enemy to tower {tower} is {closest_enemy} with distance {closest_enemy_distance}")
                 projectile = catwars.projectiles.Projectile(self.game, tower, closest_enemy)
                 self.game.projectiles_group.add(projectile)
+
+    def stop_building(self):
+        """Annulate considered tower, used when we exit build phase or so."""
+        self.considered_tower = None
 
 
 class Tower(pygame.sprite.Sprite):

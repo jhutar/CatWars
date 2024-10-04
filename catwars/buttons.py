@@ -7,7 +7,7 @@ class ButtonsGroup(catwars.generics.GroupWithDispatch):
     """Generic group of UI buttons."""
     def __init__(self, game):
         super().__init__()
-        
+
         self.game = game
 
         self.build_button = Button(self.game, (0, 500))
@@ -37,6 +37,8 @@ class Button(pygame.sprite.Sprite):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
+                self.game.towers_group.stop_building()
+                print("Button clicked")
                 return True
 
     def update(self):
