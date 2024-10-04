@@ -106,7 +106,10 @@ class Tower(pygame.sprite.Sprite):
             for r in range(2):
                 rect = pygame.Rect(c * 32, r * 32, 32, 32)
                 surf = self.image.subsurface(rect)
-                not_buildable = not self.game.world.can_build(colrow[0] + c, colrow[1] + r)
+                try:
+                    not_buildable = not self.game.world.can_build(colrow[0] + c, colrow[1] + r)
+                except catwars.world.OutOfMap:
+                    not_buildable = True
                 rect.x += self.rect.x
                 rect.y += self.rect.y
                 collides = rect.collidelist([t.rect for t in self.game.towers_group]) != -1

@@ -38,7 +38,6 @@ class Button(pygame.sprite.Sprite):
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
                 self.game.towers_group.stop_building()
-                print("Button clicked")
                 return True
 
     def update(self):

@@ -2,6 +2,9 @@ import pygame
 import pytmx
 import copy
 
+class OutOfMap(Exception):
+    pass
+
 class GroundTile(pygame.sprite.Sprite):
     """
     Generic ground sprite class for map tiles.
@@ -89,10 +92,16 @@ class World(pygame.sprite.Group):
                 self.ends.append(tile)
 
     def is_walkable(self, c, r):
-        return self.map[c][r].can_walk()
+        if c < 0 or c >= self.dimensions[0] or r < 0 or r >= self.dimensions[1]:
+            raise OutOfMap(f"Coordinates ({c}, {r}) are out of map boundaries")
+        else:
+            return self.map[c][r].can_walk()
 
     def can_build(self, c, r):
-        return self.map[c][r].can_build()
+        if c < 0 or c >= self.dimensions[0] or r < 0 or r >= self.dimensions[1]:
+            raise OutOfMap(f"Coordinates ({c}, {r}) are out of map boundaries")
+        else:
+            return self.map[c][r].can_build()
 
     def convert_tiles_to_coord(self, column, row):
         """Convert (column, row) tile spec on the map to (x, y) in pixels on the map."""
