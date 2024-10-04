@@ -18,6 +18,18 @@ class GroundTile(pygame.sprite.Sprite):
         self.colrow = colrow
         self.props = props
 
+    def can_walk(self):
+        if "can_walk" in self.props:
+            return self.props["can_walk"]
+        else:
+            return False
+
+    def can_build(self):
+        if "can_build" in self.props:
+            return self.props["can_build"]
+        else:
+            return False
+
 
 class World(pygame.sprite.Group):
     def __init__(self, level):
@@ -46,6 +58,7 @@ class World(pygame.sprite.Group):
             if layer.name.startswith("ground-"):
                 for tile in layer.tiles():
                     props = tmxdata.get_tile_properties(tile[0], tile[1], layer_number)
+                    props = props if props is not None else {}
                     props = copy.copy(props)   # pytmx returns refference to one dict if it is same, so make things easier by copying
 
                     if self.map[tile[0]][tile[1]] is None:
@@ -59,8 +72,10 @@ class World(pygame.sprite.Group):
                         tile_obj = self.map[tile[0]][tile[1]]
                         tile_obj.image = copy.copy(tile_obj.image)   # same tiles are refferences to same image
                         tile_obj.image.blit(tile[2], (0, 0))
-                        tile_obj.props["can_walk"] &= props["can_walk"]
-                        tile_obj.props["can_build"] &= props["can_build"]
+                        if "can_walk" in props:
+                            tile_obj.props["can_walk"] = props["can_walk"]
+                        if "can_build" in props:
+                            tile_obj.props["can_build"] = props["can_build"]
 
         # Load waypoints
         for obj in tmxdata.objects:
@@ -74,18 +89,10 @@ class World(pygame.sprite.Group):
                 self.ends.append(tile)
 
     def is_walkable(self, c, r):
-        props = self.map[c][r].props
-        if props is None:
-            return False   # If no tile is specified in the map
-        else:
-            return props["can_walk"]
+        return self.map[c][r].can_walk()
 
     def can_build(self, c, r):
-        props = self.map[c][r].props
-        if props is None:
-            return False   # If no tile is specified in the map
-        else:
-            return props["can_build"]
+        return self.map[c][r].can_build()
 
     def convert_tiles_to_coord(self, column, row):
         """Convert (column, row) tile spec on the map to (x, y) in pixels on the map."""
