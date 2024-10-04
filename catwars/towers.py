@@ -89,7 +89,7 @@ class Tower(pygame.sprite.Sprite):
         self.considered_possible = False
 
         # Sprite necessities
-        img_path = os.path.join(self.game.assets_dir, "graphics/tower.png")
+        img_path = os.path.join(self.game.assets_dir, "graphics/tower2.png")
         self.image = pygame.image.load(img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = topleft
