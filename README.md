@@ -3,6 +3,8 @@ CatWars
 
 Tower defence style game where cats are guarding their reams against various enemies.
 
+Page of a game on Itch.io: https://jhutar.itch.io/catwars
+
 Installation
 ------------
 
