@@ -30,7 +30,7 @@ class Score():
         return self
 
     def draw(self, screen):
-        score_surf = self.font.render(f"Score: {self.score}", False, (200, 50, 100))
+        score_surf = self.font.render(f"Paws: {self.score}", False, (200, 50, 100))
         score_rect = score_surf.get_rect(center=(400, 50))
         screen.blit(score_surf, score_rect)
 
@@ -78,13 +78,11 @@ class Game():
 
     def draw(self, screen):
         self.world.draw(screen)
-
-        self.score.draw(screen)
-
         self.enemies_group.draw(screen)
         self.towers_group.draw(screen)
         self.projectiles_group.draw(screen)
         self.buttons_group.draw(screen)
+        self.score.draw(screen)
 
     def dispatch(self):
         """Iterate through events in the queue and makes sure all child

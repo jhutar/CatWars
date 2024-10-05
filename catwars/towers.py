@@ -81,8 +81,9 @@ class Tower(pygame.sprite.Sprite):
 
         self.game = game
 
-        # Properties
-        self.range = 300
+        # Properties configured in specific tower class
+        # self.price = 1
+        # self.range = 300
 
         # Considered tower properties
         self.considered = considered
@@ -99,6 +100,7 @@ class Tower(pygame.sprite.Sprite):
             self.image.set_alpha(191)
 
         if not self.considered:
+            self.game.score -= self.price
             self.game.logger.debug(f"Built tower on {self.rect.topleft}")
 
     def draw(self, screen, unable=[]):
@@ -125,9 +127,9 @@ class Tower(pygame.sprite.Sprite):
 
 class BaseTower(Tower):
     def __init__(self, game, topleft, considered=False):
-        spritesheet_path = "graphics/tower2.png"
-
-        super().__init__(game, topleft, spritesheet_path, considered)
-
         # Properties
+        self.price = 1
         self.range = 300
+
+        spritesheet_path = "graphics/tower2.png"
+        super().__init__(game, topleft, spritesheet_path, considered)
