@@ -2,4 +2,4 @@
 
 import catwars
 
-catwars.play()
+catwars.safe_play()

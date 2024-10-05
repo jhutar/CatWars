@@ -2,14 +2,15 @@
 
 import pygame
 
+import catwars.logs
 import catwars.flow
 
-def play():
+def play(logger):
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((1, 1))
 
-    game = catwars.flow.Game()
+    game = catwars.flow.Game(logger)
 
     screen = pygame.display.set_mode(game.world.size)
     pygame.display.set_caption("CatWars")
@@ -23,5 +24,12 @@ def play():
         pygame.display.update()
         clock.tick(30)
 
+def safe_play():
+    logger = catwars.logs.setup_logger("CatWars")
+    try:
+        play(logger)
+    except Exception as e:
+        logger.exception(e)
+
 if __name__ == "__main__":
-    play()
+    safe_play()

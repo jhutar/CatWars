@@ -39,16 +39,16 @@ class Score():
 
 class Game():
     """Game specific class that wires all peces needed for the bame."""
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
+        self.logger.info("Welcome in CatWars!")
+
         self.options = catwars.helpers.Options()
 
         _dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
         self.assets_dir = os.path.join(_dir, "assets/")
 
         self.is_active = True
-
-        self.logger = catwars.logs.setup_logger("CatWars")
-        self.logger.info("Welcome in CatWars!")
 
         # World
         self.score = Score(self)
