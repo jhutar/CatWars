@@ -10,7 +10,8 @@ class ButtonsGroup(catwars.generics.GroupWithDispatch):
 
         self.game = game
 
-        self.build_button = Button(self.game, (0, 500))
+        size = self.game.world.size
+        self.build_button = Button(self.game, (0, size[1] - 100))
         self.add(self.build_button)
 
 class Button(pygame.sprite.Sprite):

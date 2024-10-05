@@ -46,7 +46,8 @@ class Score():
 
     def draw(self, screen):
         score_surf = self.font.render(f"Paws: {self.score}", False, "black")
-        score_rect = score_surf.get_rect(bottomleft=(80, 550))
+        size = self.game.world.size
+        score_rect = score_surf.get_rect(bottomleft=(80, size[1] - 50))
         screen.blit(score_surf, score_rect)
 
     def print(self):
@@ -67,10 +68,12 @@ class Game():
         self.is_active = True
 
         # World
-        self.score = Score(self)
-        self.countdown = Countdown(self)
         self.world = catwars.world.World(self, "levels/level1.tmx")
         self.waves = catwars.waves.Waves(self, "levels/level1.json")
+
+        # User interface
+        self.score = Score(self)
+        self.countdown = Countdown(self)
 
         # Paths
         pathfinding = catwars.pathfinding.Pathfinding(self)
