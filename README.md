@@ -3,6 +3,18 @@ CatWars
 
 Tower defence style game where cats are guarding their reams against various enemies.
 
+Installation
+------------
+
+To install, just clone repo, create virtual environment, install dependencies and run game:
+
+    git clone https://github.com/jhutar/CatWars.git
+    cd CatWars
+    python -m venv venv
+    source venv/bin/activate
+    pip install pygame==2.6.0 pathfinding==1.0.11 PyTMX==3.32
+    ./game.py
+
 Assets
 ------
 
