@@ -1,51 +1,20 @@
 import pygame
+import os
+import json
 
 import catwars.enemies
 
 class Waves():
     """Waves of enemies in level."""
-    def __init__(self, game):
-        self._data = [
-            {
-                "type": "attack",
-                "bursts": 1,
-                "delay": 0.3,   # Delay between bursts
-                "enemies": {
-                    "slime": 1,   # Count in each burst
-                },
-            },
-            {
-                "type": "attack",
-                "bursts": 1,
-                "delay": 0.3,   # Delay between bursts
-                "enemies": {
-                    "slime": 1,   # Count in each burst
-                },
-            },
-            {
-                "type": "attack",
-                "bursts": 2,
-                "delay": 0.3,   # Delay between bursts
-                "enemies": {
-                    "bat": 2,   # Count in each burst
-                },
-            },
-            {
-                "type": "idle",
-                "delay": 3,
-            },
-            {
-                "type": "attack",
-                "bursts": 2,
-                "delay": 0.6,   # Delay between bursts
-                "enemies": {
-                    "ghost": 2,   # Count in each burst
-                },
-            },
-        ]
+    def __init__(self, game, data_path_rel):
+        self.game = game
+
+        # Load waves data
+        data_path = os.path.join(self.game.assets_dir, data_path_rel)
+        with open(data_path, "r") as fd:
+            self._data = json.load(fd)
         self._index = 0
 
-        self.game = game
         self.wave_timer = pygame.event.custom_type()   # next waive
         self.burst_timer = pygame.event.custom_type()   # next burst in current waive
 

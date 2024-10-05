@@ -1,6 +1,7 @@
 import pygame
 import pytmx
 import copy
+import os
 
 class OutOfMap(Exception):
     pass
@@ -35,12 +36,14 @@ class GroundTile(pygame.sprite.Sprite):
 
 
 class World(pygame.sprite.Group):
-    def __init__(self, game, level):
+    def __init__(self, game, level_path_rel):
         super().__init__()
 
         self.game = game
 
-        tmxdata = pytmx.util_pygame.load_pygame(level)
+        # Load level
+        level_path = os.path.join(self.game.assets_dir, level_path_rel)
+        tmxdata = pytmx.util_pygame.load_pygame(level_path)
         self.dimensions = (tmxdata.width, tmxdata.height)
         self.tilesize = (tmxdata.tilewidth, tmxdata.tileheight)
         self.size = (
@@ -93,7 +96,7 @@ class World(pygame.sprite.Group):
                 tile = self.map[tile_coords[0]][tile_coords[1]]
                 self.ends.append(tile)
 
-        self.game.logger.info(f"Loaded world from {level} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects")
+        self.game.logger.info(f"Loaded world from {level_path_rel} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects")
 
     def is_walkable(self, c, r):
         if c < 0 or c >= self.dimensions[0] or r < 0 or r >= self.dimensions[1]:

@@ -3,7 +3,6 @@ import os
 import random
 
 import catwars.generics
-import catwars.waves
 
 
 class EnemiesGroup(catwars.generics.GroupWithDispatch):
@@ -12,7 +11,6 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
         super().__init__()
 
         self.game = game
-        self.waves = catwars.waves.Waves(self.game)
 
     def draw(self,screen):
         super().draw(screen)
@@ -20,7 +18,7 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
             e.draw(screen)
 
     def dispatch(self, event):
-        self.waves.dispatch(event)
+        self.game.waves.dispatch(event)
 
         super().dispatch(event)
 

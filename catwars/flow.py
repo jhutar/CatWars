@@ -11,6 +11,7 @@ import catwars.towers
 import catwars.projectiles
 import catwars.buttons
 import catwars.pathfinding
+import catwars.waves
 
 class Score():
     def __init__(self, game):
@@ -52,7 +53,8 @@ class Game():
 
         # World
         self.score = Score(self)
-        self.world = catwars.world.World(self, os.path.join(self.assets_dir, "levels/level1.tmx"))
+        self.world = catwars.world.World(self, "levels/level1.tmx")
+        self.waves = catwars.waves.Waves(self, "levels/level1.json")
 
         # Paths
         pathfinding = catwars.pathfinding.Pathfinding(self)

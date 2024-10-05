@@ -1,0 +1,50 @@
+[
+  {
+    "type": "idle",
+    "delay": 15
+  },
+  {
+    "type": "attack",
+    "bursts": 3,
+    "delay": 0.3,
+    "enemies": {
+      "slime": 1
+    }
+  },
+  {
+    "type": "idle",
+    "delay": 10
+  },
+  {
+    "type": "attack",
+    "bursts": 3,
+    "delay": 0.3,
+    "enemies": {
+      "slime": 3
+    }
+  },
+  {
+    "type": "idle",
+    "delay": 10
+  },
+  {
+    "type": "attack",
+    "bursts": 2,
+    "delay": 0.3,
+    "enemies": {
+      "bat": 2
+    }
+  },
+  {
+    "type": "idle",
+    "delay": 10
+  },
+  {
+    "type": "attack",
+    "bursts": 2,
+    "delay": 0.6,
+    "enemies": {
+      "ghost": 2
+    }
+  }
+]
