@@ -32,7 +32,6 @@ class Enemy(catwars.generics.AnimatedSprite):
 
         # Select my route
         self.route = random.choice(self.game.routes)
-        print("Picked", self.route[0].rect.x, self.route[0].rect.y)
 
         # Spawn point
         spawn = pygame.math.Vector2(self.route[0].rect.center)
@@ -56,6 +55,8 @@ class Enemy(catwars.generics.AnimatedSprite):
         sound_path = os.path.join(self.game.assets_dir, "audio/dead.mp3")
         self.deeead_sound = pygame.mixer.Sound(sound_path)
         ###self.jump_sound.set_volume(0.5)
+
+        self.game.logger.debug("Instantiated enemy {spritesheet_path}")
 
     def dispatch(self, event):
         super().dispatch(event)

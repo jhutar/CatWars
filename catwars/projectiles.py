@@ -46,8 +46,10 @@ class Projectile(pygame.sprite.Sprite):
             if enemy.rect.collidepoint(self.rect.center):
                 self.kill()
                 enemy.demage()
+                self.game.logger.debug("Projectile hit enemy")
 
         # Did we flew too far?
         distance = pygame.math.Vector2(self.rect.center).distance_to(self.tower.rect.center)
         if distance >= self.tower.range:
             self.kill()
+            self.game.logger.debug("Projectile missed")

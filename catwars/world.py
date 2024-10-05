@@ -35,8 +35,10 @@ class GroundTile(pygame.sprite.Sprite):
 
 
 class World(pygame.sprite.Group):
-    def __init__(self, level):
+    def __init__(self, game, level):
         super().__init__()
+
+        self.game = game
 
         tmxdata = pytmx.util_pygame.load_pygame(level)
         self.dimensions = (tmxdata.width, tmxdata.height)
@@ -90,6 +92,8 @@ class World(pygame.sprite.Group):
                 tile_coords = self.convert_coords_to_tiles(obj.x, obj.y)
                 tile = self.map[tile_coords[0]][tile_coords[1]]
                 self.ends.append(tile)
+
+        self.game.logger.info(f"Loaded world from {level} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects")
 
     def is_walkable(self, c, r):
         if c < 0 or c >= self.dimensions[0] or r < 0 or r >= self.dimensions[1]:

@@ -81,13 +81,16 @@ class Waves():
         # Process the wave
         if config["type"] == "idle":
             pygame.time.set_timer(self.wave_timer, config["delay"] * 1000, loops=1)
+            self.game.logger.debug(f"Starting idle wave {self._index} in {config['delay']} seconds")
             self._index += 1
         else:
             pygame.time.set_timer(self.burst_timer, int(config["delay"] * 1000), loops=config["bursts"])
+            self.game.logger.debug(f"Starting burst wave {self._index} in {config['delay']} seconds")
             self._burst_counter = 0
 
     def handle_burst(self):
         config = self._data[self._index]
+        self.game.logger.debug(f"Starting burst {self._burst_counter} of {config['bursts']} from wave {self._index}")
         for enemy, count in config["enemies"].items():
             for i in range(count):
                 match enemy:

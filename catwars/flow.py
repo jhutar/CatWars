@@ -3,6 +3,7 @@ import os
 import inspect
 import sys
 
+import catwars.logs
 import catwars.helpers
 import catwars.world
 import catwars.enemies
@@ -19,10 +20,12 @@ class Score():
 
     def __iadd__(self, other):
         self.score += other
+        self.game.logger.debug(f"Increades score by {other} to {self.score}")
         return self
 
     def __isub__(self, other):
         self.score -= other
+        self.game.logger.debug(f"Decreades score by {other} to {self.score}")
         return self
 
     def draw(self, screen):
@@ -44,9 +47,12 @@ class Game():
 
         self.is_active = True
 
+        self.logger = catwars.logs.setup_logger("CatWars")
+        self.logger.info("Welcome in CatWars!")
+
         # World
         self.score = Score(self)
-        self.world = catwars.world.World(os.path.join(self.assets_dir, "levels/level1.tmx"))
+        self.world = catwars.world.World(self, os.path.join(self.assets_dir, "levels/level1.tmx"))
 
         # Paths
         pathfinding = catwars.pathfinding.Pathfinding(self)
@@ -107,6 +113,7 @@ class Game():
         self.buttons_group.update()
 
     def _quit(self):
+        self.logger.info("Game ended")
         pygame.quit()
         self.score.print()
         sys.exit()

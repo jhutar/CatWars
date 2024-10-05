@@ -98,6 +98,9 @@ class Tower(pygame.sprite.Sprite):
         if self.considered:
             self.image.set_alpha(191)
 
+        if not self.considered:
+            self.game.logger.debug(f"Built tower on {self.rect.topleft}")
+
     def draw(self, screen, unable=[]):
         """This is only used when drawing considered tower during choosing place."""
         possible = True

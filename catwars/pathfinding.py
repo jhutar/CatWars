@@ -24,6 +24,6 @@ class Pathfinding():
         start = grid.node(*source)
         end = grid.node(*target)
         path, runs = self.finder.find_path(start, end, grid)
-        #print('operations:', runs, 'path length:', len(path), 'path:', [(p.x, p.y) for p in path])
+        self.game.logger.debug(f"Computed {len(path)} long path with {runs} operations: {[(p.x, p.y) for p in path]}")
         #print(grid.grid_str(path=path, start=start, end=end))
         return [self.game.world.map[p.x][p.y] for p in path]

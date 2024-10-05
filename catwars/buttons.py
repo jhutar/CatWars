@@ -37,6 +37,7 @@ class Button(pygame.sprite.Sprite):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
+                self.game.logger.debug("Clcked button")
                 self.game.towers_group.stop_building()
                 return True
 
