@@ -13,6 +13,21 @@ import catwars.buttons
 import catwars.pathfinding
 import catwars.waves
 
+
+class Countdown():
+    def __init__(self, game):
+        self.game = game
+        self.font = pygame.font.Font(os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50)
+
+    def draw(self, screen):
+        if self.game.waves.next_wave_in is not None:
+            now = pygame.time.get_ticks()
+            wave_in = self.game.waves.next_wave_in * 1000 - (now - self.game.waves.next_wave_started)
+            score_surf = self.font.render(f"Next wave: {(wave_in/1000):.0f}", False, "black")
+            score_rect = score_surf.get_rect(topleft=(20, 20))
+            screen.blit(score_surf, score_rect)
+
+
 class Score():
     def __init__(self, game):
         self.game = game
@@ -30,8 +45,8 @@ class Score():
         return self
 
     def draw(self, screen):
-        score_surf = self.font.render(f"Paws: {self.score}", False, (200, 50, 100))
-        score_rect = score_surf.get_rect(center=(400, 50))
+        score_surf = self.font.render(f"Paws: {self.score}", False, "black")
+        score_rect = score_surf.get_rect(bottomleft=(80, 550))
         screen.blit(score_surf, score_rect)
 
     def print(self):
@@ -53,6 +68,7 @@ class Game():
 
         # World
         self.score = Score(self)
+        self.countdown = Countdown(self)
         self.world = catwars.world.World(self, "levels/level1.tmx")
         self.waves = catwars.waves.Waves(self, "levels/level1.json")
 
@@ -82,6 +98,7 @@ class Game():
         self.towers_group.draw(screen)
         self.projectiles_group.draw(screen)
         self.buttons_group.draw(screen)
+        self.countdown.draw(screen)
         self.score.draw(screen)
 
     def dispatch(self):

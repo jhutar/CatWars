@@ -15,6 +15,9 @@ class Waves():
             self._data = json.load(fd)
         self._index = 0
 
+        self.next_wave_in = None
+        self.next_wave_started = None
+
         self.wave_timer = pygame.event.custom_type()   # next waive
         self.burst_timer = pygame.event.custom_type()   # next burst in current waive
 
@@ -50,10 +53,13 @@ class Waves():
         # Process the wave
         if config["type"] == "idle":
             pygame.time.set_timer(self.wave_timer, config["delay"] * 1000, loops=1)
+            self.next_wave_in = config["delay"]
+            self.next_wave_started = pygame.time.get_ticks()
             self.game.logger.debug(f"Starting idle wave {self._index} in {config['delay']} seconds")
             self._index += 1
         else:
             pygame.time.set_timer(self.burst_timer, int(config["delay"] * 1000), loops=config["bursts"])
+            self.next_wave_in = None
             self.game.logger.debug(f"Starting burst wave {self._index} in {config['delay']} seconds")
             self._burst_counter = 0
 
