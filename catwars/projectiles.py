@@ -39,7 +39,6 @@ class Projectile(pygame.sprite.Sprite):
 
         # Rotate projectile to match direction
         rotation = pygame.math.Vector2(0, -1).angle_to(self.direction)
-        print("rotation", rotation)
         self.image = pygame.transform.rotate(self.image, -1 * rotation)
 
     def update(self):
