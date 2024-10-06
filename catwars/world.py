@@ -3,8 +3,10 @@ import pytmx
 import copy
 import os
 
+
 class OutOfMap(Exception):
     pass
+
 
 class GroundTile(pygame.sprite.Sprite):
     """
@@ -14,6 +16,7 @@ class GroundTile(pygame.sprite.Sprite):
             image (pygame.Surface): Image of a tile
             topleft (tuple): Position of top-left corner of the tile image on the screen
     """
+
     def __init__(self, image, topleft, colrow, props):
         super().__init__()
         self.image = image
@@ -50,8 +53,8 @@ class World(pygame.sprite.Group):
             tmxdata.width * tmxdata.tilewidth,
             tmxdata.height * tmxdata.tileheight,
         )
-        self.starts = []   # tiles where to spawn enemies
-        self.ends = []   # tiles enemies want to reach
+        self.starts = []  # tiles where to spawn enemies
+        self.ends = []  # tiles enemies want to reach
 
         # Construct datastructure that will be populated by all tiles
         self.map = []
@@ -67,18 +70,24 @@ class World(pygame.sprite.Group):
                 for tile in layer.tiles():
                     props = tmxdata.get_tile_properties(tile[0], tile[1], layer_number)
                     props = props if props is not None else {}
-                    props = copy.copy(props)   # pytmx returns refference to one dict if it is same, so make things easier by copying
+                    props = copy.copy(
+                        props
+                    )  # pytmx returns refference to one dict if it is same, so make things easier by copying
 
                     if self.map[tile[0]][tile[1]] is None:
                         # We do not have tile for this (col, row), so create new one
                         topleft = self.convert_tiles_to_coord(tile[0], tile[1])
-                        tile_obj = GroundTile(tile[2], topleft, (tile[0], tile[1]), props)
-                        self.add(tile_obj)   # adding tile sprite to the group
-                        self.map[tile[0]][tile[1]] = tile_obj   # adding tile to the map
+                        tile_obj = GroundTile(
+                            tile[2], topleft, (tile[0], tile[1]), props
+                        )
+                        self.add(tile_obj)  # adding tile sprite to the group
+                        self.map[tile[0]][tile[1]] = tile_obj  # adding tile to the map
                     else:
                         # We already have tile for this (col, row), so merge new one
                         tile_obj = self.map[tile[0]][tile[1]]
-                        tile_obj.image = copy.copy(tile_obj.image)   # same tiles are refferences to same image
+                        tile_obj.image = copy.copy(
+                            tile_obj.image
+                        )  # same tiles are refferences to same image
                         tile_obj.image.blit(tile[2], (0, 0))
                         if "can_walk" in props:
                             tile_obj.props["can_walk"] = props["can_walk"]
@@ -96,7 +105,9 @@ class World(pygame.sprite.Group):
                 tile = self.map[tile_coords[0]][tile_coords[1]]
                 self.ends.append(tile)
 
-        self.game.logger.info(f"Loaded world from {level_path_rel} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects")
+        self.game.logger.info(
+            f"Loaded world from {level_path_rel} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects"
+        )
 
     def is_walkable(self, c, r):
         if c < 0 or c >= self.dimensions[0] or r < 0 or r >= self.dimensions[1]:

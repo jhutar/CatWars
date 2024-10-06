@@ -8,6 +8,7 @@ import catwars.projectiles
 
 class TowersGroup(pygame.sprite.Group):
     """Game specific sprite group of our towers."""
+
     def __init__(self, game):
         super().__init__()
 
@@ -46,7 +47,9 @@ class TowersGroup(pygame.sprite.Group):
             closest_enemy = None
             closest_enemy_distance = None
             for enemy in self.game.enemies_group:
-                distance = pygame.math.Vector2(tower.rect.x, tower.rect.y).distance_to((enemy.rect.x, enemy.rect.y))
+                distance = pygame.math.Vector2(tower.rect.x, tower.rect.y).distance_to(
+                    (enemy.rect.x, enemy.rect.y)
+                )
 
                 # Check if enemy is not out of range
                 if distance > tower.range:
@@ -65,8 +68,10 @@ class TowersGroup(pygame.sprite.Group):
 
             # If some enemy was found
             if closest_enemy is not None:
-                #print(f"Closes enemy to tower {tower} is {closest_enemy} with distance {closest_enemy_distance}")
-                projectile = catwars.projectiles.Projectile(self.game, tower, closest_enemy)
+                # print(f"Closes enemy to tower {tower} is {closest_enemy} with distance {closest_enemy_distance}")
+                projectile = catwars.projectiles.Projectile(
+                    self.game, tower, closest_enemy
+                )
                 self.game.projectiles_group.add(projectile)
 
     def stop_building(self):
@@ -76,6 +81,7 @@ class TowersGroup(pygame.sprite.Group):
 
 class Tower(pygame.sprite.Sprite):
     """Game specific tower sprite class."""
+
     def __init__(self, game, topleft, spritesheet_path, considered=False):
         super().__init__()
 
@@ -112,12 +118,16 @@ class Tower(pygame.sprite.Sprite):
                 rect = pygame.Rect(c * 32, r * 32, 32, 32)
                 surf = self.image.subsurface(rect)
                 try:
-                    not_buildable = not self.game.world.can_build(colrow[0] + c, colrow[1] + r)
+                    not_buildable = not self.game.world.can_build(
+                        colrow[0] + c, colrow[1] + r
+                    )
                 except catwars.world.OutOfMap:
                     not_buildable = True
                 rect.x += self.rect.x
                 rect.y += self.rect.y
-                collides = rect.collidelist([t.rect for t in self.game.towers_group]) != -1
+                collides = (
+                    rect.collidelist([t.rect for t in self.game.towers_group]) != -1
+                )
                 if not_buildable or collides:
                     surf.fill("red", special_flags=pygame.BLEND_RGBA_MIN)
                     possible = False

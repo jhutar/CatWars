@@ -14,24 +14,32 @@ import catwars.pathfinding
 import catwars.waves
 
 
-class Countdown():
+class Countdown:
     def __init__(self, game):
         self.game = game
-        self.font = pygame.font.Font(os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50)
+        self.font = pygame.font.Font(
+            os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50
+        )
 
     def draw(self, screen):
         if self.game.waves.next_wave_in is not None:
             now = pygame.time.get_ticks()
-            wave_in = self.game.waves.next_wave_in * 1000 - (now - self.game.waves.next_wave_started)
-            score_surf = self.font.render(f"Next wave: {(wave_in/1000):.0f}", False, "black")
+            wave_in = self.game.waves.next_wave_in * 1000 - (
+                now - self.game.waves.next_wave_started
+            )
+            score_surf = self.font.render(
+                f"Next wave: {(wave_in/1000):.0f}", False, "black"
+            )
             score_rect = score_surf.get_rect(topleft=(20, 20))
             screen.blit(score_surf, score_rect)
 
 
-class Score():
+class Score:
     def __init__(self, game):
         self.game = game
-        self.font = pygame.font.Font(os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50)
+        self.font = pygame.font.Font(
+            os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50
+        )
         self.score = 0
 
     def __iadd__(self, other):
@@ -54,8 +62,9 @@ class Score():
         print(f"SCORE: {self.score}")
 
 
-class Game():
+class Game:
     """Game specific class that wires all peces needed for the bame."""
+
     def __init__(self, logger):
         self.logger = logger
         self.logger.info("Welcome in CatWars!")
@@ -106,7 +115,7 @@ class Game():
 
     def dispatch(self):
         """Iterate through events in the queue and makes sure all child
-           entities have a chance to react to the events as well."""
+        entities have a chance to react to the events as well."""
         for event in pygame.event.get():
             if not self.is_active:
                 self._quit()

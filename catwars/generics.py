@@ -1,8 +1,10 @@
 import os
 import pygame
 
+
 class GroupWithDispatch(pygame.sprite.Group):
     """Generic sprite group that supports dispatch method."""
+
     def dispatch(self, event):
         """Process given event by all members of the group. Returns True when some member decides nobody else needs to process the event now."""
         for member in self:
@@ -10,8 +12,9 @@ class GroupWithDispatch(pygame.sprite.Group):
                 return True
 
 
-class SpriteSheet():
+class SpriteSheet:
     """Generic wrapper around spritesheet for character."""
+
     def __init__(self, path, size, config):
         """
         Load spritesheet of a character. Spritesheet have different actions
@@ -50,7 +53,9 @@ class SpriteSheet():
             # How many images we are going to load from the row
             if "count" in action:
                 count = int(action["count"])
-                assert count <= spritesheet_columns, f"Requested count for {action['action']} is less or equal to what we have"
+                assert (
+                    count <= spritesheet_columns
+                ), f"Requested count for {action['action']} is less or equal to what we have"
             else:
                 count = spritesheet_columns
 
@@ -82,6 +87,7 @@ class SpriteSheet():
 
 class AnimatedSprite(pygame.sprite.Sprite):
     """Generic animated sprite class."""
+
     def __init__(self, game, path, size, config):
         super().__init__()
 

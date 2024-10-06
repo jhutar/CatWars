@@ -4,8 +4,10 @@ import json
 
 import catwars.enemies
 
-class Waves():
+
+class Waves:
     """Waves of enemies in level."""
+
     def __init__(self, game, data_path_rel):
         self.game = game
 
@@ -18,8 +20,8 @@ class Waves():
         self.next_wave_in = None
         self.next_wave_started = None
 
-        self.wave_timer = pygame.event.custom_type()   # next waive
-        self.burst_timer = pygame.event.custom_type()   # next burst in current waive
+        self.wave_timer = pygame.event.custom_type()  # next waive
+        self.burst_timer = pygame.event.custom_type()  # next burst in current waive
 
         self.handle_wave()
 
@@ -55,17 +57,25 @@ class Waves():
             pygame.time.set_timer(self.wave_timer, config["delay"] * 1000, loops=1)
             self.next_wave_in = config["delay"]
             self.next_wave_started = pygame.time.get_ticks()
-            self.game.logger.debug(f"Starting idle wave {self._index} in {config['delay']} seconds")
+            self.game.logger.debug(
+                f"Starting idle wave {self._index} in {config['delay']} seconds"
+            )
             self._index += 1
         else:
-            pygame.time.set_timer(self.burst_timer, int(config["delay"] * 1000), loops=config["bursts"])
+            pygame.time.set_timer(
+                self.burst_timer, int(config["delay"] * 1000), loops=config["bursts"]
+            )
             self.next_wave_in = None
-            self.game.logger.debug(f"Starting burst wave {self._index} in {config['delay']} seconds")
+            self.game.logger.debug(
+                f"Starting burst wave {self._index} in {config['delay']} seconds"
+            )
             self._burst_counter = 0
 
     def handle_burst(self):
         config = self._data[self._index]
-        self.game.logger.debug(f"Starting burst {self._burst_counter} of {config['bursts']} from wave {self._index}")
+        self.game.logger.debug(
+            f"Starting burst {self._burst_counter} of {config['bursts']} from wave {self._index}"
+        )
         for enemy, count in config["enemies"].items():
             for i in range(count):
                 match enemy:

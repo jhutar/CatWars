@@ -5,6 +5,7 @@ import pygame
 import catwars.logs
 import catwars.flow
 
+
 def play(logger):
     pygame.init()
     clock = pygame.time.Clock()
@@ -24,12 +25,14 @@ def play(logger):
         pygame.display.update()
         clock.tick(30)
 
+
 def safe_play():
     logger = catwars.logs.setup_logger("CatWars")
     try:
         play(logger)
     except Exception as e:
         logger.exception(e)
+
 
 if __name__ == "__main__":
     safe_play()

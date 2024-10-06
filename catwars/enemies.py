@@ -7,12 +7,13 @@ import catwars.generics
 
 class EnemiesGroup(catwars.generics.GroupWithDispatch):
     """Game specific sprite group of our enemies, also configures timers related to enemies."""
+
     def __init__(self, game):
         super().__init__()
 
         self.game = game
 
-    def draw(self,screen):
+    def draw(self, screen):
         super().draw(screen)
         for e in self:
             e.draw(screen)
@@ -25,6 +26,7 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
 
 class Enemy(catwars.generics.AnimatedSprite):
     """Game specific enemy sprite class."""
+
     def __init__(self, game, spritesheet_path, spritesheet_size, spritesheet_config):
         super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
 
@@ -44,8 +46,10 @@ class Enemy(catwars.generics.AnimatedSprite):
         self.update_target()
 
         # Defaults
-        self.health = 0   # initial health value of the enemy, configured in specific class
-        self.health_current = None   # current value of enemy health, if None, will be set based on self health on first use
+        self.health = (
+            0  # initial health value of the enemy, configured in specific class
+        )
+        self.health_current = None  # current value of enemy health, if None, will be set based on self health on first use
 
         # Sounds
         sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
@@ -170,6 +174,7 @@ class Slime(Enemy):
         self.health = 10
         self.set_action("walk_east")
 
+
 class Bat(Enemy):
     def __init__(self, game):
         spritesheet_path = "graphics/enemies/bat.png"
@@ -199,6 +204,7 @@ class Bat(Enemy):
         self.speed = 7.5
         self.health = 5
         self.set_action("walk_east")
+
 
 class Ghost(Enemy):
     def __init__(self, game):

@@ -2,6 +2,7 @@ import logging
 import logging.handlers
 import time
 
+
 def setup_logger(app_name, stderr_log_lvl=logging.DEBUG):
     """
     Create logger that logs to both stderr and log file but with different log levels
@@ -16,9 +17,7 @@ def setup_logger(app_name, stderr_log_lvl=logging.DEBUG):
     logging.getLogger().setLevel(logging.NOTSET)
 
     # Log message format
-    formatter = logging.Formatter(
-        "%(asctime)s %(name)s %(levelname)s %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s %(name)s %(levelname)s %(message)s")
     formatter.converter = time.gmtime
 
     # Add stderr handler, with provided level
