@@ -14,7 +14,7 @@ To install, just clone repo, create virtual environment, install dependencies an
     cd CatWars
     python -m venv venv
     source venv/bin/activate
-    pip install pygame==2.6.0 pathfinding==1.0.11 PyTMX==3.32
+    pip install -r requirements.txt
     ./game.py
 
 Assets
