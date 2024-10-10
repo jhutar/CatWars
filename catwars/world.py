@@ -64,7 +64,7 @@ class World(pygame.sprite.Group):
                 col.append(None)
             self.map.append(col)
 
-        # Create all the tiles and add them to the group and also to the map for easier refference
+        # Create all the tiles and add them to the group and also to the map for easier reference
         for layer_number, layer in enumerate(tmxdata):
             if layer.name.startswith("ground-"):
                 for tile in layer.tiles():

@@ -61,7 +61,7 @@ class TowersGroup(pygame.sprite.Group):
                     closest_enemy_distance = distance
                     continue
 
-                # If this is closes enemy we got
+                # If this is closest enemy we got
                 if distance < closest_enemy_distance:
                     closest_enemy = enemy
                     closest_enemy_distance = distance
