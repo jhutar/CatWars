@@ -26,7 +26,7 @@ class Projectile(pygame.sprite.Sprite):
         self.tower = tower
 
         # Sprite necessities
-        img_path = os.path.join(self.game.assets_dir, "graphics/projectile.png")
+        img_path = os.path.join(self.game.options.assets_dir, "graphics/projectile.png")
         self.image = pygame.image.load(img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = self.tower.rect.center

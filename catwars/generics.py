@@ -94,7 +94,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.game = game
 
         # Load spritesheet
-        path2 = os.path.join(self.game.assets_dir, path)
+        path2 = os.path.join(self.game.options.assets_dir, path)
         self.spritesheet = SpriteSheet(path2, size, config)
 
         # Defaults

@@ -52,9 +52,9 @@ class Enemy(catwars.generics.AnimatedSprite):
         self.health_current = None  # current value of enemy health, if None, will be set based on self health on first use
 
         # Sounds
-        sound_path = os.path.join(self.game.assets_dir, "audio/demage.mp3")
+        sound_path = os.path.join(self.game.options.assets_dir, "audio/demage.mp3")
         self.demaaage_sound = pygame.mixer.Sound(sound_path)
-        sound_path = os.path.join(self.game.assets_dir, "audio/dead.mp3")
+        sound_path = os.path.join(self.game.options.assets_dir, "audio/dead.mp3")
         self.deeead_sound = pygame.mixer.Sound(sound_path)
         ###self.jump_sound.set_volume(0.5)
 

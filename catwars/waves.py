@@ -12,7 +12,7 @@ class Waves:
         self.game = game
 
         # Load waves data
-        data_path = os.path.join(self.game.assets_dir, data_path_rel)
+        data_path = os.path.join(self.game.options.assets_dir, data_path_rel)
         with open(data_path, "r") as fd:
             self._data = json.load(fd)
         self._index = 0

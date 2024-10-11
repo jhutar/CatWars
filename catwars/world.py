@@ -45,7 +45,7 @@ class World(pygame.sprite.Group):
         self.game = game
 
         # Load level
-        level_path = os.path.join(self.game.assets_dir, level_path_rel)
+        level_path = os.path.join(self.game.options.assets_dir, level_path_rel)
         tmxdata = pytmx.util_pygame.load_pygame(level_path)
         self.dimensions = (tmxdata.width, tmxdata.height)
         self.tilesize = (tmxdata.tilewidth, tmxdata.tileheight)

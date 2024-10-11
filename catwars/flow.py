@@ -18,7 +18,7 @@ class Countdown:
     def __init__(self, game):
         self.game = game
         self.font = pygame.font.Font(
-            os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50
+            os.path.join(self.game.options.assets_dir, "font/Pixeltype.ttf"), 50
         )
 
     def draw(self, screen):
@@ -38,7 +38,7 @@ class Score:
     def __init__(self, game):
         self.game = game
         self.font = pygame.font.Font(
-            os.path.join(self.game.assets_dir, "font/Pixeltype.ttf"), 50
+            os.path.join(self.game.options.assets_dir, "font/Pixeltype.ttf"), 50
         )
         self.score = 0
 
@@ -71,13 +71,11 @@ class Game:
 
         self.options = catwars.helpers.Options()
 
-        _dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
-        self.assets_dir = os.path.join(_dir, "assets/")
-
         self.is_active = True
 
         # World
         self.world = catwars.world.World(self, "levels/level1.tmx")
+        pygame.display.set_mode(self.world.size)
         self.waves = catwars.waves.Waves(self, "levels/level1.json")
 
         # User interface
@@ -113,36 +111,19 @@ class Game:
         self.countdown.draw(screen)
         self.score.draw(screen)
 
-    def dispatch(self):
+    def dispatch(self, event):
         """Iterate through events in the queue and makes sure all child
         entities have a chance to react to the events as well."""
-        for event in pygame.event.get():
-            if not self.is_active:
-                self._quit()
-
-            if event.type == pygame.QUIT:
-                self._quit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    self._quit()
-
-            # If this returns True, it means nobody else needs to process the event now
-            if self.buttons_group.dispatch(event):
-                continue
-            if self.enemies_group.dispatch(event):
-                continue
-            if self.towers_group.dispatch(event):
-                continue
+        # If this returns True, it means nobody else needs to process the event now
+        if self.buttons_group.dispatch(event):
+            return
+        if self.enemies_group.dispatch(event):
+            return
+        if self.towers_group.dispatch(event):
+            return
 
     def update(self):
         self.enemies_group.update()
         self.towers_group.update()
         self.projectiles_group.update()
         self.buttons_group.update()
-
-    def _quit(self):
-        self.logger.info("Game ended")
-        pygame.quit()
-        self.score.print()
-        sys.exit()
