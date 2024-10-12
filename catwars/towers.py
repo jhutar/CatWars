@@ -23,18 +23,15 @@ class TowersGroup(pygame.sprite.Group):
         if event.type == self.shoot_timer:
             self.consider_shooting()
 
-        if self.game.buttons_group.build_button.active:
-            if event.type == pygame.MOUSEMOTION:
-                colrow = self.game.world.convert_coords_to_tiles(*event.pos)
-                topleft = self.game.world.convert_tiles_to_coord(*colrow)
-                self.considered_tower = BaseTower(self.game, topleft, considered=True)
+        if self.considered_tower is not None:
+            if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN:
+                self.considered_tower.update_position(event.pos)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                colrow = self.game.world.convert_coords_to_tiles(*event.pos)
-                topleft = self.game.world.convert_tiles_to_coord(*colrow)
                 if self.considered_tower.considered_possible:
-                    self.add(BaseTower(self.game, topleft, considered=False))
-                    self.stop_building()
+                    self.considered_tower.considered = False
+                    self.add(self.considered_tower)
+                    self.start_building()   # create new considered tower as this one was built
 
     def draw(self, screen):
         super().draw(screen)
@@ -68,11 +65,15 @@ class TowersGroup(pygame.sprite.Group):
 
             # If some enemy was found
             if closest_enemy is not None:
-                # print(f"Closes enemy to tower {tower} is {closest_enemy} with distance {closest_enemy_distance}")
+                self.game.logger.debug(f"Closes enemy to tower {tower} is {closest_enemy} with distance {closest_enemy_distance}")
                 projectile = catwars.projectiles.Projectile(
                     self.game, tower, closest_enemy
                 )
                 self.game.projectiles_group.add(projectile)
+
+    def start_building(self):
+        """Create considered tower, used when we enter build phase or so."""
+        self.considered_tower = ArrowTower(self.game, (0, 0), considered=False)
 
     def stop_building(self):
         """Annulate considered tower, used when we exit build phase or so."""
@@ -94,10 +95,11 @@ class Tower(pygame.sprite.Sprite):
         # Considered tower properties
         self.considered = considered
         self.considered_possible = False
+        self.considered_tiles = []
 
         # Sprite necessities
-        img_path = os.path.join(self.game.options.assets_dir, spritesheet_path)
-        self.image = pygame.image.load(img_path).convert_alpha()
+        self.img_path = os.path.join(self.game.options.assets_dir, spritesheet_path)
+        self.image = pygame.image.load(self.img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.topleft = topleft
 
@@ -109,9 +111,21 @@ class Tower(pygame.sprite.Sprite):
             self.game.score -= self.price
             self.game.logger.debug(f"Built tower on {self.rect.topleft}")
 
-    def draw(self, screen, unable=[]):
+    def draw(self, screen):
         """This is only used when drawing considered tower during choosing place."""
+        for tilespec in self.considered_tiles:
+            screen.blit(*tilespec)
+
+    def update_position(self, xy):
+        """This is only used when finding locatoin for considered tower."""
+        colrow = self.game.world.convert_coords_to_tiles(*xy)
+        topleft = self.game.world.convert_tiles_to_coord(*colrow)
+        self.rect.topleft = topleft
+
+        self.image = pygame.image.load(self.img_path).convert_alpha()
+
         possible = True
+        self.considered_tiles = []
         colrow = self.game.world.convert_coords_to_tiles(*self.rect.topleft)
         for c in range(2):
             for r in range(2):
@@ -125,17 +139,15 @@ class Tower(pygame.sprite.Sprite):
                     not_buildable = True
                 rect.x += self.rect.x
                 rect.y += self.rect.y
-                collides = (
-                    rect.collidelist([t.rect for t in self.game.towers_group]) != -1
-                )
+                tower_rects = [t.rect for t in self.game.towers_group]
+                collides = rect.collidelist(tower_rects) != -1
                 if not_buildable or collides:
                     surf.fill("red", special_flags=pygame.BLEND_RGBA_MIN)
                     possible = False
-                screen.blit(surf, rect)
+                self.considered_tiles.append((surf, rect))
         self.considered_possible = possible
 
-
-class BaseTower(Tower):
+class ArrowTower(Tower):
     def __init__(self, game, topleft, considered=False):
         # Properties
         self.price = 1
