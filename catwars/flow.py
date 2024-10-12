@@ -75,7 +75,6 @@ class Level:
 
         # World
         self.world = catwars.world.World(self, "levels/level1.tmx")
-        pygame.display.set_mode(self.world.size)
         self.waves = catwars.waves.Waves(self, "levels/level1.json")
 
         # User interface

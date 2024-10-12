@@ -3,53 +3,40 @@
 import pygame
 
 import catwars.logs
-import catwars.menu
-import catwars.flow
+import catwars.ui
 
 
 def play(logger):
     pygame.init()
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((1, 1), pygame.HIDDEN)
 
-    is_active = True
-
-    ###menu = catwars.menu.Menu(logger)
-    level = catwars.flow.Level(logger)
-
-    screen = pygame.display.get_surface()
-    pygame.display.set_caption("CatWars")
+    ui = catwars.ui.UI(logger)
 
     # Main loop
     while True:
         for event in pygame.event.get():
-            ###if not self.menu.is_active:
-            ###    break
+            if not ui.is_active:
+                break
 
             if event.type == pygame.QUIT:
-                is_active = False
+                ui.is_active = False
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
-                    is_active = False
+                    ui.is_active = False
 
-            ###menu.dispatch(event)
-            level.dispatch(event)
+            ui.dispatch(event)
 
-        ###menu.draw(screen)
-        ###menu.update()
-        level.draw(screen)
-        level.update()
+        ui.draw()
+        ui.update()
 
-        if not level.is_active:
-            is_active = False
-
-        if is_active:
-            pygame.display.update()
-            clock.tick(30)
-        else:
+        if not ui.is_active:
             break
 
+        pygame.display.update()
+        clock.tick(30)
+
+    ui.level.score.print()
     pygame.quit()
 
 
