@@ -88,13 +88,13 @@ class SpriteSheet:
 class AnimatedSprite(pygame.sprite.Sprite):
     """Generic animated sprite class."""
 
-    def __init__(self, game, path, size, config):
+    def __init__(self, level, path, size, config):
         super().__init__()
 
-        self.game = game
+        self.level = level
 
         # Load spritesheet
-        path2 = os.path.join(self.game.options.assets_dir, path)
+        path2 = os.path.join(self.level.options.assets_dir, path)
         self.spritesheet = SpriteSheet(path2, size, config)
 
         # Defaults
@@ -106,7 +106,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def dispatch(self, event):
-        if event.type == self.game.animation_timer:
+        if event.type == self.level.animation_timer:
             self._index = self.spritesheet.next_index(self._action, self._index)
 
     def update(self):

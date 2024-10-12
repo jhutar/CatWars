@@ -8,10 +8,10 @@ import catwars.generics
 class EnemiesGroup(catwars.generics.GroupWithDispatch):
     """Game specific sprite group of our enemies, also configures timers related to enemies."""
 
-    def __init__(self, game):
+    def __init__(self, level):
         super().__init__()
 
-        self.game = game
+        self.level = level
 
     def draw(self, screen):
         super().draw(screen)
@@ -19,7 +19,7 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
             e.draw(screen)
 
     def dispatch(self, event):
-        self.game.waves.dispatch(event)
+        self.level.waves.dispatch(event)
 
         super().dispatch(event)
 
@@ -27,11 +27,11 @@ class EnemiesGroup(catwars.generics.GroupWithDispatch):
 class Enemy(catwars.generics.AnimatedSprite):
     """Game specific enemy sprite class."""
 
-    def __init__(self, game, spritesheet_path, spritesheet_size, spritesheet_config):
-        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+    def __init__(self, level, spritesheet_path, spritesheet_size, spritesheet_config):
+        super().__init__(level, spritesheet_path, spritesheet_size, spritesheet_config)
 
         # Select my route
-        self.route = random.choice(self.game.routes)
+        self.route = random.choice(self.level.routes)
 
         # Spawn point
         spawn = pygame.math.Vector2(self.route[0].rect.center)
@@ -52,13 +52,13 @@ class Enemy(catwars.generics.AnimatedSprite):
         self.health_current = None  # current value of enemy health, if None, will be set based on self health on first use
 
         # Sounds
-        sound_path = os.path.join(self.game.options.assets_dir, "audio/demage.mp3")
+        sound_path = os.path.join(self.level.options.assets_dir, "audio/demage.mp3")
         self.demaaage_sound = pygame.mixer.Sound(sound_path)
-        sound_path = os.path.join(self.game.options.assets_dir, "audio/dead.mp3")
+        sound_path = os.path.join(self.level.options.assets_dir, "audio/dead.mp3")
         self.deeead_sound = pygame.mixer.Sound(sound_path)
         ###self.jump_sound.set_volume(0.5)
 
-        self.game.logger.debug("Instantiated enemy {spritesheet_path}")
+        self.level.logger.debug("Instantiated enemy {spritesheet_path}")
 
     def dispatch(self, event):
         super().dispatch(event)
@@ -75,7 +75,7 @@ class Enemy(catwars.generics.AnimatedSprite):
         new_center = self.rect.center + change
 
         # Detect if we are coliding with some other enemy
-        for e in self.game.enemies_group:
+        for e in self.level.enemies_group:
             if e == self:
                 continue
             if (e.rect.center - new_center).length() < 8:
@@ -111,7 +111,7 @@ class Enemy(catwars.generics.AnimatedSprite):
         if self.health_current <= 0:
             self.deeead_sound.play()
             self.kill()
-            self.game.score += 1
+            self.level.score += 1
         else:
             self.demaaage_sound.play()
 
@@ -126,7 +126,7 @@ class Enemy(catwars.generics.AnimatedSprite):
         except IndexError:
             # Enemy reached final target
             self.kill()
-            self.game.score -= 3
+            self.level.score -= 3
             return
 
     def update_direction(self):
@@ -145,7 +145,7 @@ class Enemy(catwars.generics.AnimatedSprite):
 
 
 class Slime(Enemy):
-    def __init__(self, game):
+    def __init__(self, level):
         spritesheet_path = "graphics/enemies/slime.png"
         spritesheet_size = (32, 32)
         spritesheet_config = [
@@ -167,7 +167,7 @@ class Slime(Enemy):
             },
         ]
 
-        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+        super().__init__(level, spritesheet_path, spritesheet_size, spritesheet_config)
 
         # Properties
         self.speed = 3
@@ -176,7 +176,7 @@ class Slime(Enemy):
 
 
 class Bat(Enemy):
-    def __init__(self, game):
+    def __init__(self, level):
         spritesheet_path = "graphics/enemies/bat.png"
         spritesheet_size = (32, 32)
         spritesheet_config = [
@@ -198,7 +198,7 @@ class Bat(Enemy):
             },
         ]
 
-        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+        super().__init__(level, spritesheet_path, spritesheet_size, spritesheet_config)
 
         # Properties
         self.speed = 7.5
@@ -207,7 +207,7 @@ class Bat(Enemy):
 
 
 class Ghost(Enemy):
-    def __init__(self, game):
+    def __init__(self, level):
         spritesheet_path = "graphics/enemies/ghost.png"
         spritesheet_size = (32, 32)
         spritesheet_config = [
@@ -229,7 +229,7 @@ class Ghost(Enemy):
             },
         ]
 
-        super().__init__(game, spritesheet_path, spritesheet_size, spritesheet_config)
+        super().__init__(level, spritesheet_path, spritesheet_size, spritesheet_config)
 
         # Properties
         self.speed = 5

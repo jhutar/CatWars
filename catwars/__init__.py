@@ -15,7 +15,7 @@ def play(logger):
     is_active = True
 
     ###menu = catwars.menu.Menu(logger)
-    game = catwars.flow.Game(logger)
+    level = catwars.flow.Level(logger)
 
     screen = pygame.display.get_surface()
     pygame.display.set_caption("CatWars")
@@ -34,14 +34,14 @@ def play(logger):
                     is_active = False
 
             ###menu.dispatch(event)
-            game.dispatch(event)
+            level.dispatch(event)
 
         ###menu.draw(screen)
         ###menu.update()
-        game.draw(screen)
-        game.update()
+        level.draw(screen)
+        level.update()
 
-        if not game.is_active:
+        if not level.is_active:
             is_active = False
 
         if is_active:

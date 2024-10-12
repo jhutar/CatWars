@@ -39,13 +39,13 @@ class GroundTile(pygame.sprite.Sprite):
 
 
 class World(pygame.sprite.Group):
-    def __init__(self, game, level_path_rel):
+    def __init__(self, level, level_path_rel):
         super().__init__()
 
-        self.game = game
+        self.level = level
 
         # Load level
-        level_path = os.path.join(self.game.options.assets_dir, level_path_rel)
+        level_path = os.path.join(self.level.options.assets_dir, level_path_rel)
         tmxdata = pytmx.util_pygame.load_pygame(level_path)
         self.dimensions = (tmxdata.width, tmxdata.height)
         self.tilesize = (tmxdata.tilewidth, tmxdata.tileheight)
@@ -105,7 +105,7 @@ class World(pygame.sprite.Group):
                 tile = self.map[tile_coords[0]][tile_coords[1]]
                 self.ends.append(tile)
 
-        self.game.logger.info(
+        self.level.logger.info(
             f"Loaded world from {level_path_rel} with {sum([len(col) for col in self.map])} tiles and {len(self.starts) + len(self.ends)} objects"
         )
 

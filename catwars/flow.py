@@ -15,17 +15,17 @@ import catwars.waves
 
 
 class Countdown:
-    def __init__(self, game):
-        self.game = game
+    def __init__(self, level):
+        self.level = level
         self.font = pygame.font.Font(
-            os.path.join(self.game.options.assets_dir, "font/Pixeltype.ttf"), 50
+            os.path.join(self.level.options.assets_dir, "font/Pixeltype.ttf"), 50
         )
 
     def draw(self, screen):
-        if self.game.waves.next_wave_in is not None:
+        if self.level.waves.next_wave_in is not None:
             now = pygame.time.get_ticks()
-            wave_in = self.game.waves.next_wave_in * 1000 - (
-                now - self.game.waves.next_wave_started
+            wave_in = self.level.waves.next_wave_in * 1000 - (
+                now - self.level.waves.next_wave_started
             )
             score_surf = self.font.render(
                 f"Next wave: {(wave_in/1000):.0f}", False, "black"
@@ -35,26 +35,26 @@ class Countdown:
 
 
 class Score:
-    def __init__(self, game):
-        self.game = game
+    def __init__(self, level):
+        self.level = level
         self.font = pygame.font.Font(
-            os.path.join(self.game.options.assets_dir, "font/Pixeltype.ttf"), 50
+            os.path.join(self.level.options.assets_dir, "font/Pixeltype.ttf"), 50
         )
         self.score = 0
 
     def __iadd__(self, other):
         self.score += other
-        self.game.logger.debug(f"Increades score by {other} to {self.score}")
+        self.level.logger.debug(f"Increades score by {other} to {self.score}")
         return self
 
     def __isub__(self, other):
         self.score -= other
-        self.game.logger.debug(f"Decreades score by {other} to {self.score}")
+        self.level.logger.debug(f"Decreades score by {other} to {self.score}")
         return self
 
     def draw(self, screen):
         score_surf = self.font.render(f"Paws: {self.score}", False, "black")
-        size = self.game.world.size
+        size = self.level.world.size
         score_rect = score_surf.get_rect(bottomleft=(80, size[1] - 50))
         screen.blit(score_surf, score_rect)
 
@@ -62,7 +62,7 @@ class Score:
         print(f"SCORE: {self.score}")
 
 
-class Game:
+class Level:
     """Game specific class that wires all peces needed for the bame."""
 
     def __init__(self, logger):

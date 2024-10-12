@@ -7,10 +7,10 @@ import os
 class ProjectilesGroup(pygame.sprite.Group):
     """Game specific sprite group of projectiles shoot by towers."""
 
-    def __init__(self, game):
+    def __init__(self, level):
         super().__init__()
 
-        self.game = game
+        self.level = level
 
     def dispatch(self, event):
         pass
@@ -19,14 +19,14 @@ class ProjectilesGroup(pygame.sprite.Group):
 class Projectile(pygame.sprite.Sprite):
     """Game specific tower sprite class."""
 
-    def __init__(self, game, tower, enemy):
+    def __init__(self, level, tower, enemy):
         super().__init__()
 
-        self.game = game
+        self.level = level
         self.tower = tower
 
         # Sprite necessities
-        img_path = os.path.join(self.game.options.assets_dir, "graphics/projectile.png")
+        img_path = os.path.join(self.level.options.assets_dir, "graphics/projectile.png")
         self.image = pygame.image.load(img_path).convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.center = self.tower.rect.center
@@ -48,11 +48,11 @@ class Projectile(pygame.sprite.Sprite):
         self.rect.center += change
 
         # Did we hit some enemy?
-        for enemy in self.game.enemies_group:
+        for enemy in self.level.enemies_group:
             if enemy.rect.collidepoint(self.rect.center):
                 self.kill()
                 enemy.demage()
-                self.game.logger.debug("Projectile hit enemy")
+                self.level.logger.debug("Projectile hit enemy")
 
         # Did we flew too far?
         distance = pygame.math.Vector2(self.rect.center).distance_to(
@@ -60,4 +60,4 @@ class Projectile(pygame.sprite.Sprite):
         )
         if distance >= self.tower.range:
             self.kill()
-            self.game.logger.debug("Projectile missed")
+            self.level.logger.debug("Projectile missed")
