@@ -98,8 +98,8 @@ class Tower(pygame.sprite.Sprite):
         self.considered_tiles = []
 
         # Sprite necessities
-        self.img_path = os.path.join(self.level.options.assets_dir, spritesheet_path)
-        self.image = pygame.image.load(self.img_path).convert_alpha()
+        self.spritesheet_path = spritesheet_path
+        self.image = self.level.cache.load_image(self.spritesheet_path)
         self.rect = self.image.get_rect()
         self.rect.topleft = topleft
 
@@ -122,7 +122,7 @@ class Tower(pygame.sprite.Sprite):
         topleft = self.level.world.convert_tiles_to_coord(*colrow)
         self.rect.topleft = topleft
 
-        self.image = pygame.image.load(self.img_path).convert_alpha()
+        self.image = self.level.cache.load_image(self.spritesheet_path)
 
         possible = True
         self.considered_tiles = []

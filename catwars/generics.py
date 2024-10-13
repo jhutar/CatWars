@@ -15,7 +15,7 @@ class GroupWithDispatch(pygame.sprite.Group):
 class SpriteSheet:
     """Generic wrapper around spritesheet for character."""
 
-    def __init__(self, path, size, config):
+    def __init__(self, level, path, size, config):
         """
         Load spritesheet of a character. Spritesheet have different actions
         in rows (heading north, heading east...) and animation frames in
@@ -43,7 +43,9 @@ class SpriteSheet:
                 count (int): Optional, says how many columns should be loaded in case trailing columns are empty
                 order (list): Option, to be used if you want to rearange frames of the animation and not use images as they follow in columns
         """
-        spritesheet = pygame.image.load(path).convert_alpha()
+        self.level = level
+
+        spritesheet = self.level.cache.load_image(path)
         spritesheet_rect = spritesheet.get_rect()
         spritesheet_columns = int(spritesheet_rect.width / size[0])
         spritesheet_rows = int(spritesheet_rect.height / size[1])
@@ -94,8 +96,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.level = level
 
         # Load spritesheet
-        path2 = os.path.join(self.level.options.assets_dir, path)
-        self.spritesheet = SpriteSheet(path2, size, config)
+        self.spritesheet = SpriteSheet(level, path, size, config)
 
         # Defaults
         self._index = 0

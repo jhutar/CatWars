@@ -39,8 +39,8 @@ class Button(pygame.sprite.Sprite):
         img_path_idle = os.path.join(self.level.options.assets_dir, image_idle)
         img_path_active = os.path.join(self.level.options.assets_dir, image_active)
         self.images = {
-            False: pygame.image.load(img_path_idle).convert_alpha(),
-            True: pygame.image.load(img_path_active).convert_alpha(),
+            False: self.level.cache.load_image(image_idle),
+            True: self.level.cache.load_image(image_active),
         }
         self.image = self.images[self.active]
         self.rect = self.image.get_rect()

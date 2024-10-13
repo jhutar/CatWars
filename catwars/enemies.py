@@ -56,7 +56,6 @@ class Enemy(catwars.generics.AnimatedSprite):
         self.demaaage_sound = pygame.mixer.Sound(sound_path)
         sound_path = os.path.join(self.level.options.assets_dir, "audio/dead.mp3")
         self.deeead_sound = pygame.mixer.Sound(sound_path)
-        ###self.jump_sound.set_volume(0.5)
 
         self.level.logger.debug("Instantiated enemy {spritesheet_path}")
 
