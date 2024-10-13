@@ -4,6 +4,7 @@ import pygame
 
 import catwars.generics
 import catwars.helpers
+import catwars.cache
 
 
 class MenuGroup(catwars.generics.GroupWithDispatch):
@@ -14,7 +15,7 @@ class MenuGroup(catwars.generics.GroupWithDispatch):
 
         self.logger = logger
 
-        self.options = catwars.helpers.Options()
+        self.cache = catwars.cache.Cache(self.logger)
 
         # What should UI do
         #   active ... menu is on the screen
@@ -34,8 +35,7 @@ class MenuButton(pygame.sprite.Sprite):
 
         self.menu_group = menu_group
 
-        font_path = os.path.join(self.menu_group.options.assets_dir, "font/Pixeltype.ttf")
-        self.font = pygame.font.Font(font_path, 50)
+        self.font = self.menu_group.cache.load_font("font/Pixeltype.ttf", 50)
 
         # Sprite necessities
         self.rect = pygame.Rect((100, 100), (300, 100))

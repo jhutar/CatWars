@@ -17,9 +17,7 @@ import catwars.waves
 class Countdown:
     def __init__(self, level):
         self.level = level
-        self.font = pygame.font.Font(
-            os.path.join(self.level.options.assets_dir, "font/Pixeltype.ttf"), 50
-        )
+        self.font = self.level.cache.load_font("font/Pixeltype.ttf", 50)
 
     def draw(self, screen):
         if self.level.waves.next_wave_in is not None:
@@ -37,9 +35,7 @@ class Countdown:
 class Score:
     def __init__(self, level):
         self.level = level
-        self.font = pygame.font.Font(
-            os.path.join(self.level.options.assets_dir, "font/Pixeltype.ttf"), 50
-        )
+        self.font = self.level.cache.load_font("font/Pixeltype.ttf", 50)
         self.score = 0
 
     def __iadd__(self, other):
@@ -70,6 +66,7 @@ class Level:
         self.logger.info("Welcome in CatWars!")
 
         self.options = catwars.helpers.Options()
+        self.cache = catwars.cache.Cache(self.logger)
 
         self.is_active = True
 
