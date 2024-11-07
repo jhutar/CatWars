@@ -22,6 +22,16 @@ class ButtonsGroup(catwars.generics.GroupWithDispatch):
         )
         self.add(self.build_button)
 
+        self.skip_button = Button(
+            self.level,
+            (72, self.level.world.size[1] - 100),
+            "graphics/ui/button-skip-idle.png",
+            "graphics/ui/button-skip-active.png",
+            self.level.towers_group.start_building,
+            self.level.towers_group.stop_building,
+        )
+        self.add(self.skip_button)
+
 
 class Button(pygame.sprite.Sprite):
     """Generic button sprite class."""
