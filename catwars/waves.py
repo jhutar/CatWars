@@ -91,3 +91,18 @@ class Waves:
         if self._burst_counter == config["bursts"]:
             self._index += 1
             self.handle_wave()
+
+    def skip_to_wave(self):
+        """Skip to next wave."""
+        try:
+            config = self._data[self._index - 1]
+        except IndexError:
+            self.level.logger.debug("Can not skip")
+            return
+
+        if config["type"] == "idle":
+            self.level.logger.debug("Skipping time to next wave")
+            pygame.time.set_timer(self.wave_timer, 1, loops=1)
+        else:
+            self.level.logger.debug("Skipping time to next burst")
+            pygame.time.set_timer(self.burst_timer, 1, loops=1)
