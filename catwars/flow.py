@@ -51,7 +51,7 @@ class Score:
     def draw(self, screen):
         score_surf = self.font.render(f"Paws: {self.score}", False, "black")
         size = self.level.world.size
-        score_rect = score_surf.get_rect(bottomleft=(80, size[1] - 50))
+        score_rect = score_surf.get_rect(bottomleft=(180, size[1] - 50))
         screen.blit(score_surf, score_rect)
 
     def print(self):
