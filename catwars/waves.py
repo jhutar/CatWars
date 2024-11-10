@@ -17,8 +17,10 @@ class Waves:
             self._data = json.load(fd)
         self._index = 0
 
+        # Used by countdown UI element
         self.next_wave_in = None
         self.next_wave_started = None
+        self.next_wave_coming = True
 
         self.wave_timer = pygame.event.custom_type()  # next waive
         self.burst_timer = pygame.event.custom_type()  # next burst in current waive
@@ -49,6 +51,7 @@ class Waves:
         # If we are still running and there are no more waves, just sleep
         if no_more_waves:
             config = {"type": "idle", "delay": 1}
+            self.next_wave_coming = False
         else:
             config = self._data[self._index]
 

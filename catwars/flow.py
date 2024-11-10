@@ -20,7 +20,7 @@ class Countdown:
         self.font = self.level.cache.load_font("font/Pixeltype.ttf", 50)
 
     def draw(self, screen):
-        if self.level.waves.next_wave_in is not None:
+        if self.level.waves.next_wave_coming and self.level.waves.next_wave_in is not None:
             now = pygame.time.get_ticks()
             wave_in = self.level.waves.next_wave_in * 1000 - (
                 now - self.level.waves.next_wave_started
