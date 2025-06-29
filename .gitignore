@@ -1,2 +1,7 @@
+venv/
+
 .*.swp
 catwars/__pycache__/
+
+build/
+dist/
