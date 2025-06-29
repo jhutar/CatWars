@@ -35,29 +35,26 @@ jobs:
 
     - name: Build executable
       run: |
-        pyinstaller game.py
+        pyinstaller CatWars.spec
       working-directory: ./
 
     - name: Create Artifact (Windows)
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: windows-executables
-        path: dist/
+        name: CatWars-windows
+        path: dist/CatWars
 
     - name: Create Artifact (Linux)
       if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: linux-executables
-        path: dist/
+        name: CatWars-linux
+        path: dist/CatWars
 
     - name: Create Artifact (macOS)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: macos-executables
-        path: dist/
-
-    - name: List files in dist folder
-      run: ls -R ./dist/
+        name: CatWars-macos
+        path: dist/CatWars
