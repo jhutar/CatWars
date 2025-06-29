@@ -42,8 +42,8 @@ jobs:
       if: matrix.os == 'windows-latest'
       uses: actions/upload-artifact@v4
       with:
-        name: CatWars-windows
-        path: dist/CatWars
+        name: CatWars-windows.exe
+        path: dist/CatWars.exe
 
     - name: Create Artifact (Linux)
       if: matrix.os == 'ubuntu-latest'
